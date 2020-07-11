@@ -2,12 +2,12 @@ FROM node:12
 
 WORKDIR /opt/mjdiscord
 
-COPY packages*.json ./
+COPY package*.json ./
 
 RUN npm install -g typescript
 RUN npm install
 
-COPY src src
+COPY . .
 
 RUN tsc
 CMD [ "node", "dist/main.js" ]
