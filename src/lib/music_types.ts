@@ -1,0 +1,94 @@
+import { Guild, VoiceConnection } from "discord.js";
+import { TextChannel, VoiceChannel, DMChannel, NewsChannel } from "discord.js";
+import { getSongStream } from "../util/song";
+import * as ytdl from "ytdl-core";
+
+export interface MusicItem {
+  textChannel: TextChannel | DMChannel | NewsChannel;
+  voiceChannel: VoiceChannel;
+  song: Song;
+}
+
+export interface Song {
+  id: string;
+  site: string;
+  url?: string;
+}
+
+export interface MusicData {
+  queue: MusicItem[];
+  isPlaying: boolean;
+  nowPlaying: MusicItem;
+  voiceConnection: VoiceConnection;
+  volume: number;
+}
+
+export class MusicGuild {
+  private queue: MusicItem[];
+  private nowPlaying: MusicItem;
+  private voiceConnection: VoiceConnection;
+  private volume: number;
+
+  constructor() {
+    this.queue = [];
+    this.nowPlaying = undefined;
+    this.voiceConnection = undefined;
+    this.volume = 1;
+  }
+
+  get isPlaying(): boolean {
+    if (!this.voiceConnection) {
+      return false;
+    }
+    return this.voiceConnection.dispatcher && !this.voiceConnection.dispatcher.paused;
+  }
+
+  public async play(): Promise<MusicItem> {
+    if (this.nowPlaying) {
+      if (!this.isPlaying) {
+        this.voiceConnection.dispatcher.resume();
+      }
+      return this.nowPlaying;
+    }
+    this.nowPlaying = this.queue.shift();
+    if (!this.nowPlaying) {
+      if (this.voiceConnection) {
+        await this.stop();
+      }
+      return undefined;
+    }
+
+    if (!this.voiceConnection || (this.voiceConnection.channel.id != this.nowPlaying.voiceChannel.id)) {
+      this.voiceConnection = await this.nowPlaying.voiceChannel.join();
+    }
+
+    this.nowPlaying.textChannel.send(`Now playing: ${(await ytdl.getInfo(this.nowPlaying.song.id)).title}`);
+    this.voiceConnection.play(getSongStream(this.nowPlaying.song)).on("finish", () => {
+      if (this.queue.length > 0) {
+        this.nowPlaying = undefined;
+        this.play();
+      } else {
+        this.stop();
+      }
+    });
+  }
+
+  public async stop() {
+    if (this.voiceConnection) {
+      this.voiceConnection.disconnect();
+      this.voiceConnection = undefined;
+    }
+    this.queue = [];
+    this.nowPlaying = undefined;
+  }
+
+  public addQueue(...songs: MusicItem[]) {
+    this.queue.push(...songs);
+  }
+
+  public async skip() {
+    if (this.isPlaying) {
+      this.voiceConnection.dispatcher.end();
+    }
+  }
+}
