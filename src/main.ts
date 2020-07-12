@@ -14,6 +14,7 @@ import { DadCommand } from "./command/dad";
 import { SkipCommand } from "./command/music/skip";
 import { StopCommand } from "./command/music/stop";
 import { TeamCommand } from "./command/team";
+import { GiphyCommand } from "./command/giphy_command";
 
 const client = new Client();
 client.login(config.get("client_key"));
@@ -23,6 +24,7 @@ const commands: AbstractCommand[] = [];
 // Register commands here
 commands.push(new TestCommand());
 commands.push(new ReactCommand(client));
+commands.push(new GiphyCommand());
 commands.push(new ChuckCommand());
 commands.push(new DadCommand());
 // commands.push(new MovieCommand(config.get("radarr.baseurl"), config.get("radarr.apikey")));
