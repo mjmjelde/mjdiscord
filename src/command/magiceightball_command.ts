@@ -33,7 +33,7 @@ export class MagicEightBallCommand implements AbstractCommand {
     }
 
     should_execute(msg: discord.Message): boolean {
-        return ["eightball", "eb"].indexOf(util.getCommand(msg).toLowerCase()) > 0;
+        return ["eightball", "eb"].indexOf(util.getCommand(msg).toLowerCase()) >= 0;
     }
 
     execute(msg: discord.Message) {
