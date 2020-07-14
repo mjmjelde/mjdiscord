@@ -14,7 +14,7 @@ export class GiphyCommand implements AbstractCommand {
     }
 
     help() {
-        return commandCharacter() + 'gif <keyword> : Show random gif for a keyword'
+        return commandCharacter() + 'gif <keyword> : Show random gif for a keyword';
     }
 
     should_execute(msg: discord.Message): boolean {
