@@ -12,6 +12,6 @@ export class TestCommand implements AbstractCommand {
   }
 
   execute(msg: Message | PartialMessage) {
-    msg.react('732477463820763146');
+    msg.react('715608842255466578');
   }
 }
