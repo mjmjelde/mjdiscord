@@ -63,7 +63,7 @@ export class MusicGuild {
     }
 
     this.nowPlaying.textChannel.send(`Now playing: ${(await ytdl.getInfo(this.nowPlaying.song.id)).title}`);
-    this.voiceConnection.play(getSongStream(this.nowPlaying.song)).on("finish", () => {
+    this.voiceConnection.play(getSongStream(this.nowPlaying.song), {volume: this.volume}).on("finish", () => {
       if (this.queue.length > 0) {
         this.nowPlaying = undefined;
         this.play();
@@ -71,6 +71,13 @@ export class MusicGuild {
         this.stop();
       }
     });
+  }
+
+  public async setVolume(vol: number) {
+    this.volume = vol;
+    if (this.isPlaying) {
+      this.voiceConnection.dispatcher.setVolume(this.volume);
+    }
   }
 
   public async stop() {

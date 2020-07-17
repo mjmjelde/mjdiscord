@@ -4,13 +4,21 @@ import * as config from 'config';
 import * as giphyapi from 'giphy-api';
 import { commandCharacter, getCommand } from '../util/command';
 import { CommandArgs } from '../util/command_args';
+import Axios, { AxiosInstance } from 'axios';
 
 export class GiphyCommand implements AbstractCommand {
 
     giphy = null;
+    private axios: AxiosInstance;
 
     constructor(){
         this.giphy = new giphyapi(config.get("giphy.apikey"));
+        this.axios = Axios.create({
+            params: {
+                api_key: config.get("giphy.apikey")
+            },
+            baseURL: "https://api.giphy.com/v1/gifs"
+        });
     }
 
     help() {
@@ -24,17 +32,21 @@ export class GiphyCommand implements AbstractCommand {
     execute(msg: discord.Message) {
         const args = new CommandArgs(msg.content);
         args.pop(); // pop off the command arg
-        if(args.atEnd()){
-            return msg.reply("Invalid usage...\n" + this.help() );
-        }
-        const keyword = args.restToString();
-        this.giphy.random(keyword).then(image => {
-            if (image.data.url){
+        if (args.atEnd()){
+            msg.reply("Invalid usage...\n" + this.help() );
+            this.giphy.random().then(image => {
                 msg.channel.send(image.data.url);
-            } else {
-                msg.reply(`no gifs found for ${keyword}`);
-            }
-        });
+            });
+        } else {
+            const keyword = args.restToString();
+            this.giphy.search({q: keyword}).then(image => {
+                if (image.data.url){
+                    msg.channel.send(image.data.url);
+                } else {
+                    msg.reply(`no gifs found for ${keyword}`);
+                }
+            });
+        }
     }
 
 }
