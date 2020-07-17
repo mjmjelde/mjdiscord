@@ -32,16 +32,16 @@ export class GiphyCommand implements AbstractCommand {
     execute(msg: discord.Message) {
         const args = new CommandArgs(msg.content);
         args.pop(); // pop off the command arg
-        if (args.atEnd()){
-            msg.reply("Invalid usage...\n" + this.help() );
+        if (args.atEnd()) {
             this.giphy.random().then(image => {
                 msg.channel.send(image.data.url);
             });
         } else {
             const keyword = args.restToString();
             this.giphy.search({q: keyword}).then(image => {
-                if (image.data.url){
-                    msg.channel.send(image.data.url);
+                if (image.data){
+                    const item = image.data[Math.floor(Math.random() * image.data.length)];
+                    msg.channel.send(item.url);
                 } else {
                     msg.reply(`no gifs found for ${keyword}`);
                 }
