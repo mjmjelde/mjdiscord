@@ -16,6 +16,7 @@ import { StopCommand } from "./command/music/stop";
 import { TeamCommand } from "./command/team";
 import { GiphyCommand } from "./command/giphy_command";
 import { MagicEightBallCommand } from "./command/magiceightball_command";
+import { TableFlipCommand } from "./command/tableflip";
 
 const client = new Client();
 client.login(config.get("client_key"));
@@ -35,6 +36,7 @@ commands.push(new SkipCommand());
 commands.push(new StopCommand());
 commands.push(new TeamCommand());
 commands.push(new MagicEightBallCommand());
+commands.push(new TableFlipCommand());
 commands.push(new HelpCommand(commands)); // Do this one last because of passing commands to it!
 
 client.on('ready', () => {
@@ -59,6 +61,10 @@ client.on('ready', () => {
         console.log(e);
       }
     })
+  });
+
+  client.user.setActivity({
+    
   })
 });
 
