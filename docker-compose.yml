@@ -1,0 +1,6 @@
+version: 3
+services:
+  mjbot:
+    build: .
+    image: mjmjelde/mjdiscord
+    restart: unless-stopped
