@@ -1,6 +1,6 @@
 import { AbstractCommand } from "./abstract_command";
 
-import { Message, PartialMessage, Client, DMChannel, Collection, Snowflake, GuildMember, MessageEmbed } from "discord.js";
+import { Message, PartialMessage, Client, DMChannel, Collection, Snowflake, GuildMember, MessageEmbed, GuildChannel, VoiceChannel } from "discord.js";
 import { commandCharacter, getCommand } from "../util/command";
 import { CommandArgs } from "../util/command_args";
 
@@ -9,7 +9,7 @@ export class TeamCommand implements AbstractCommand {
     return getCommand(msg).toLowerCase() == "team";
   }
 
-  execute(msg: Message | PartialMessage): void {
+  async execute(msg: Message | PartialMessage) {
     if (msg.channel instanceof DMChannel) {
       msg.reply("You must be in a guild channel to run this command");
       return;
@@ -39,7 +39,14 @@ export class TeamCommand implements AbstractCommand {
     for (let i = 0; i < teams.length; i++) {
       reply.addField(`Team ${i + 1}`, teams[i].length > 0 ? teams[i].map(gm => gm.displayName).join('\n') : "None", true);
     }
-    msg.channel.send(reply);
+    if (teams.length <= this.channels(msg).size && msg.guild.me.hasPermission("MOVE_MEMBERS")) {
+      reply.setFooter(`Move the teams to different channels? (Click reaction)`);
+    }
+    const replyMsg = await msg.channel.send(reply);
+    if (teams.length <= this.channels(msg).size && msg.guild.me.hasPermission("MOVE_MEMBERS")) {
+      this.askToMove(replyMsg, teams, msg.author.id);
+    }
+
   }
 
   help(): string {
@@ -76,6 +83,29 @@ export class TeamCommand implements AbstractCommand {
     }
 
     return out;
+  }
+
+  private channels(msg: Message | PartialMessage): Collection<string, GuildChannel> {
+    return msg.guild.channels.cache.filter(channel => channel instanceof VoiceChannel && channel.name.toLowerCase().startsWith("mw"));
+  }
+
+  private async askToMove(reply: Message | PartialMessage, teams: GuildMember[][], userId: string) {
+    await reply.react('👍');
+    await reply.react('👎');
+    const filter = (reaction, user) => {
+      return ['👍', '👎'].includes(reaction.emoji.name) && user.id == userId;
+    }
+    reply.awaitReactions(filter, {time: 60 * 1000, max: 1}).then( async (collected) => {
+      if(collected.first() && (collected.first().emoji.name == '👍')) {
+        const chans = this.channels(reply);
+        for (let i = 0; i < teams.length; i++) {
+          for (let gm of teams[i]) {
+            await gm.voice.setChannel(chans[i]);
+          }
+        }
+      }
+      await reply.reactions.removeAll();
+    })
   }
 
 }
