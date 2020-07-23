@@ -95,7 +95,7 @@ export class TeamCommand implements AbstractCommand {
     const filter = (reaction, user) => {
       return ['👍', '👎'].includes(reaction.emoji.name) && user.id == userId;
     }
-    reply.awaitReactions(filter, {time: 60 * 1000, max: 1}).then( async (collected) => {
+    reply.awaitReactions(filter, {time: 5 * 60 * 1000, max: 1}).then( async (collected) => {
       if(collected.first() && (collected.first().emoji.name == '👍')) {
         const chans = this.channels(reply);
         for (let i = 0; i < teams.length; i++) {
