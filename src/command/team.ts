@@ -96,13 +96,16 @@ export class TeamCommand implements AbstractCommand {
       return ['👍', '👎'].includes(reaction.emoji.name) && user.id == userId;
     }
     reply.awaitReactions(filter, {time: 5 * 60 * 1000, max: 1}).then( async (collected) => {
-      if(collected.first() && (collected.first().emoji.name == '👍')) {
+      if (collected.first() && (collected.first().emoji.name == '👍')) {
+        console.log("Moving everyone to correct channels...");
         const chans = this.channels(reply);
         for (let i = 0; i < teams.length; i++) {
-          for (let gm of teams[i]) {
+          for (const gm of teams[i]) {
             await gm.voice.setChannel(chans[i]);
           }
         }
+      } else {
+        console.log("Not moving anyone...");
       }
       await reply.reactions.removeAll();
     })

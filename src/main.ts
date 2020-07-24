@@ -62,10 +62,6 @@ client.on('ready', () => {
       }
     })
   });
-
-  client.user.setActivity({
-    
-  })
 });
 
 console.log('Starting bot...');
