@@ -44,7 +44,7 @@ export class TeamCommand implements AbstractCommand {
     }
     const replyMsg = await msg.channel.send(reply);
     if (teams.length <= this.channels(msg).size && msg.guild.me.hasPermission("MOVE_MEMBERS")) {
-      this.askToMove(replyMsg, teams, msg.author.id);
+      this.askToMove(replyMsg, teams, this.channels(msg), msg.author.id);
     }
 
   }
@@ -89,7 +89,7 @@ export class TeamCommand implements AbstractCommand {
     return msg.guild.channels.cache.filter(channel => channel instanceof VoiceChannel && channel.name.toLowerCase().startsWith("mw"));
   }
 
-  private async askToMove(reply: Message | PartialMessage, teams: GuildMember[][], userId: string) {
+  private async askToMove(reply: Message | PartialMessage, teams: GuildMember[][], chans: Collection<string, GuildChannel>, userId: string) {
     await reply.react('👍');
     await reply.react('👎');
     const filter = (reaction, user) => {
@@ -98,17 +98,17 @@ export class TeamCommand implements AbstractCommand {
     reply.awaitReactions(filter, {time: 5 * 60 * 1000, max: 1}).then( async (collected) => {
       if (collected.first() && (collected.first().emoji.name == '👍')) {
         console.log("Moving everyone to correct channels...");
-        const chans = this.channels(reply);
         for (let i = 0; i < teams.length; i++) {
           for (const gm of teams[i]) {
-            await gm.voice.setChannel(chans[i]);
+            const chan = chans.array()[i];
+            await gm.voice.setChannel(chan);
           }
         }
       } else {
         console.log("Not moving anyone...");
       }
       await reply.reactions.removeAll();
-    })
+    });
   }
 
 }
