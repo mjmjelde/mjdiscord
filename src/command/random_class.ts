@@ -20,11 +20,13 @@ export class RandomClassCommand implements AbstractCommand {
     reply.addFields(
       { name: 'Primary Gun', value: primaryGun.name, inline: true },
       { name: 'Attachments', value: this.attachmentsToString(primaryGun.attachments), inline: true},
+      { name: '\u200B', value: '\u200B' },
       { name: 'Secondary Gun', value: secondaryGun.name, inline: true },
       { name: 'Attachments', value: this.attachmentsToString(secondaryGun.attachments), inline: true},
       { name: "Perks", value: `${perks.perk1.name}\n${perks.perk2.name}\n${perks.perk3.name}`},
       { name: 'Lethals', value: `${lethals.lethal.name}\n${lethals.tactical.name}`}
     );
+    console.log(reply);
     msg.reply(reply);
   }
   help(): string {
