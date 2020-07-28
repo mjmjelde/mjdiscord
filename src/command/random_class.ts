@@ -36,6 +36,9 @@ export class RandomClassCommand implements AbstractCommand {
     for (const attachment of attachments) {
       ret += `${attachment[0]}\n`;
     }
+    if (ret == "") {
+      ret = "None";
+    }
     return ret;
   }
 
