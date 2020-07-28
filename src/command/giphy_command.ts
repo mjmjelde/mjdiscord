@@ -30,7 +30,7 @@ export class GiphyCommand implements AbstractCommand {
     }
 
     execute(msg: discord.Message) {
-        const args = new CommandArgs(msg.content);
+        const args = new CommandArgs(msg.client, msg.content);
         args.pop(); // pop off the command arg
         if (args.atEnd()) {
             this.giphy.random().then(image => {

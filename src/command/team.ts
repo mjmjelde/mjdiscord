@@ -20,7 +20,7 @@ export class TeamCommand implements AbstractCommand {
       return;
     }
 
-    const args = new CommandArgs(msg.content);
+    const args = new CommandArgs(msg.client, msg.content);
     args.pop();
     let numTeams = 2;
     if (!args.atEnd()) {

@@ -1,18 +1,38 @@
+import { User, Client } from "discord.js";
+
 export class CommandArgs {
   private originalString: string;
   private splitString: string[];
   private index: number = 0;
 
-  constructor(argString: string) {
+  private client: Client;
+
+  constructor(client: Client, argString: string) {
+      this.client = client;
       this.originalString = argString;
       this.splitString = this.originalString.split(" ");
   }
 
   public pop(): string {
-      if(this.index >= this.splitString.length) {
+      if (this.index >= this.splitString.length) {
           throw new Error("Out of bounds");
       }
       return this.splitString[this.index++];
+  }
+
+  public popUser(): User {
+      let user = this.pop();
+      if (user.startsWith('<@') && user.endsWith('>')) {
+          user = user.slice(2, -1);
+
+          if (user.startsWith('!')) {
+              user = user.slice(1);
+          }
+
+          return this.client.users.cache.get(user);
+      }
+      this.putBack();
+      return undefined;
   }
 
   public putBack() {

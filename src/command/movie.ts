@@ -21,7 +21,7 @@ export class MovieCommand implements AbstractCommand {
   }
 
   execute(msg: Message | PartialMessage): void {
-    const args = new CommandArgs(msg.content);
+    const args = new CommandArgs(msg.client, msg.content);
     args.pop(); // Get rid of command character
     const movieTitle = args.restToString();
     this.client.searchMovie(movieTitle).then(async (movies) => {

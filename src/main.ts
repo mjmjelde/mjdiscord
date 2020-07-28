@@ -1,5 +1,5 @@
 import * as config from "config";
-import { Client, Structures, VoiceConnection } from 'discord.js';
+import { Client, Structures, VoiceConnection, Intents } from 'discord.js';
 import { AbstractCommand } from './command/abstract_command';
 import { HelpCommand } from './command/help_command';
 import { ChuckCommand } from './command/chuck';
@@ -17,8 +17,9 @@ import { TeamCommand } from "./command/team";
 import { GiphyCommand } from "./command/giphy_command";
 import { MagicEightBallCommand } from "./command/magiceightball_command";
 import { TableFlipCommand } from "./command/tableflip";
+import { RandomClassCommand } from "./command/random_class";
 
-const client = new Client();
+const client = new Client({ws: {intents: Intents.ALL}});
 client.login(config.get("client_key"));
 
 const commands: AbstractCommand[] = [];
@@ -37,6 +38,7 @@ commands.push(new StopCommand());
 commands.push(new TeamCommand());
 commands.push(new MagicEightBallCommand());
 commands.push(new TableFlipCommand());
+commands.push(new RandomClassCommand());
 commands.push(new HelpCommand(commands)); // Do this one last because of passing commands to it!
 
 client.on('ready', () => {

@@ -23,7 +23,7 @@ export class PlayCommand implements AbstractCommand {
       return;
     }
 
-    const args = new CommandArgs(msg.content);
+    const args = new CommandArgs(msg.client, msg.content);
     args.pop();
     const song = args.pop();
     let url: URL;
