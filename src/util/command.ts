@@ -6,7 +6,7 @@ export function getCommand(msg: Message | PartialMessage): string {
   if(!msg.content.startsWith(commandCharacter())) {
     return '';
   }
-  return new CommandArgs(msg.content).pop().substring(1);
+  return new CommandArgs(msg.client, msg.content).pop().substring(1);
 }
 
 export function commandCharacter(): string {
