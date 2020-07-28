@@ -28,7 +28,7 @@ export class RandomClassCommand implements AbstractCommand {
     msg.reply(reply);
   }
   help(): string {
-    throw new Error("Method not implemented.");
+    return "";
   }
 
   private attachmentsToString(attachments: string[][]) {
