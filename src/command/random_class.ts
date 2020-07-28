@@ -23,8 +23,9 @@ export class RandomClassCommand implements AbstractCommand {
       { name: '\u200B', value: '\u200B' },
       { name: 'Secondary Gun', value: secondaryGun.name, inline: true },
       { name: 'Attachments', value: this.attachmentsToString(secondaryGun.attachments), inline: true},
-      { name: "Perks", value: `${perks.perk1.name}\n${perks.perk2.name}\n${perks.perk3.name}`},
-      { name: 'Lethals', value: `${lethals.lethal.name}\n${lethals.tactical.name}`}
+      { name: '\u200B', value: '\u200B' },
+      { name: "Perks", value: `${perks.perk1.name}\n${perks.perk2.name}\n${perks.perk3.name}`, inline: true},
+      { name: 'Lethals', value: `${lethals.lethal.name}\n${lethals.tactical.name}`, inline: true}
     );
     console.log(reply);
     msg.reply(reply);
