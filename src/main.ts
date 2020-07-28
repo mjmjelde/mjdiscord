@@ -19,7 +19,7 @@ import { MagicEightBallCommand } from "./command/magiceightball_command";
 import { TableFlipCommand } from "./command/tableflip";
 import { RandomClassCommand } from "./command/random_class";
 
-const client = new Client({ws: {intents: Intents.ALL}});
+const client = new Client();
 client.login(config.get("client_key"));
 
 const commands: AbstractCommand[] = [];
