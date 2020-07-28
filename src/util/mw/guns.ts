@@ -3372,11 +3372,11 @@ export function randomPrimaryClass() {
   const maxAttachments = 5;
   const randomGun = Object.assign({}, primaryGuns[Math.floor(Math.random() * primaryGuns.length)]) as GunInfo;
   while (randomGun.attachments.length > maxAttachments ) {
-    randomGun.attachments = randomGun.attachments.slice(Math.floor(Math.random() * randomGun.attachments.length), 1);
+    randomGun.attachments.splice(Math.floor(Math.random() * randomGun.attachments.length), 1);
   }
   for(let i = 0; i < randomGun.attachments.length; i++) {
     while(randomGun.attachments[i].length > 1) {
-      randomGun.attachments[i] = randomGun.attachments[i].slice(Math.floor(Math.random() * randomGun.attachments[i].length), 1);
+      randomGun.attachments[i].splice(Math.floor(Math.random() * randomGun.attachments[i].length), 1);
     }
   }
   return randomGun;
@@ -3386,11 +3386,11 @@ export function randomSecondaryClass() {
   const maxAttachments = 5;
   const randomGun = Object.assign({}, secondaryGuns[Math.floor(Math.random() * secondaryGuns.length)]) as GunInfo;
   while (randomGun.attachments.length > maxAttachments ) {
-    randomGun.attachments = randomGun.attachments.slice(Math.floor(Math.random() * randomGun.attachments.length), 1);
+    randomGun.attachments.splice(Math.floor(Math.random() * randomGun.attachments.length), 1);
   }
   for(let i = 0; i < randomGun.attachments.length; i++) {
     while(randomGun.attachments[i].length > 1) {
-      randomGun.attachments[i] = randomGun.attachments[i].slice(Math.floor(Math.random() * randomGun.attachments[i].length), 1);
+      randomGun.attachments[i].splice(Math.floor(Math.random() * randomGun.attachments[i].length), 1);
     }
   }
   return randomGun;
