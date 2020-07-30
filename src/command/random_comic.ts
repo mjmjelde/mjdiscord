@@ -1,6 +1,6 @@
 import { AbstractCommand } from "./abstract_command";
 import { Message, PartialMessage, MessageAttachment } from "discord.js";
-import { getCommand } from "../util/command";
+import { getCommand, commandCharacter } from "../util/command";
 import axios from "axios";
 import { parse } from 'node-html-parser';
 import { createCanvas, loadImage } from 'canvas';
@@ -11,7 +11,7 @@ export class RandomComicCommand implements AbstractCommand {
     }
     
     help(): string {
-        return "";
+        return commandCharacter() + "randomcomic : Generates a random comic to be displayed";
     }
 
     execute(msg: Message | PartialMessage): void {
