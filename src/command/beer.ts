@@ -34,7 +34,8 @@ export class BeerCommand implements AbstractCommand {
       reply.addFields(
         {name: "Style", value: beer.style, inline: true},
         {name: "ABV", value: beer.abv, inline: true},
-        {name: '\u200B', value: '\u200B' },
+      );
+      reply.addFields(
         {name: "Brewer", value: `${beer.brewer}\n${beer.location}`, inline: true},
         {name: "Score", value: beer.score, inline: true}
       );
