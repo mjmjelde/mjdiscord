@@ -29,15 +29,17 @@ export class BeerCommand implements AbstractCommand {
       const reply = new MessageEmbed();
       reply.setTitle(beer.name);
       reply.setURL(beer.url);
-      reply.setImage(beer.img);
+      // reply.setImage(beer.img);
+      reply.setThumbnail(beer.img);
       reply.addFields(
         {name: "Style", value: beer.style, inline: true},
         {name: "ABV", value: beer.abv, inline: true},
+        {name: '\u200B', value: '\u200B' },
         {name: "Brewer", value: `${beer.brewer}\n${beer.location}`, inline: true},
         {name: "Score", value: beer.score, inline: true}
       );
       msg.channel.send(reply);
-    })
+    });
   }
   help(): string {
     return commandCharacter() + "beer <beer name> : Searches BeerAdvocate for your beer and returns the first result";
