@@ -39,6 +39,8 @@ export class BeerCommand implements AbstractCommand {
         {name: "Score", value: beer.score, inline: true}
       );
       msg.channel.send(reply);
+    }).catch(err => {
+      msg.reply("We are unable to find a beer with that name");
     });
   }
   help(): string {
