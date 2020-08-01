@@ -28,7 +28,15 @@ export class BeerCommand implements AbstractCommand {
     this.getBeer(beer).then(beer => {
       const reply = new MessageEmbed();
       reply.setTitle(beer.name);
-
+      reply.setURL(beer.url);
+      reply.setImage(beer.img);
+      reply.addFields(
+        {name: "Style", value: beer.style, inline: true},
+        {name: "ABV", value: beer.abv, inline: true},
+        {name: "Brewer", value: `${beer.brewer}\n${beer.location}`, inline: true},
+        {name: "Score", value: beer.score, inline: true}
+      );
+      msg.channel.send(reply);
     })
   }
   help(): string {
