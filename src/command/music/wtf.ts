@@ -14,6 +14,11 @@ export class WTFCommand implements AbstractCommand {
       return;
     }
 
+    if (!msg.member.voice.channel) {
+      msg.reply("You must be in a voice channel to use this command!");
+      return;
+    }
+
     const command = getCommand(msg).toLowerCase();
 
     const guild = msg.guild as MjGuildInterface;
