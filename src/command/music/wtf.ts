@@ -40,6 +40,7 @@ export class WTFCommand implements AbstractCommand {
         }
       });
     }
+    guild.music.play();
   }
   help(): string {
     return commandCharacter() + "<wtf|wtfs> : Plays a long or short wtf sound";
