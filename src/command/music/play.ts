@@ -69,6 +69,7 @@ export class PlayCommand implements AbstractCommand {
       songs.push({
         textChannel: msg.channel,
         voiceChannel: msg.member.voice.channel,
+        sendToText: true,
         song: {
           id: item.id,
           site: 'youtube',
@@ -87,6 +88,7 @@ export class PlayCommand implements AbstractCommand {
     guild.music.addQueue({
       textChannel: msg.channel,
       voiceChannel: msg.member.voice.channel,
+      sendToText: true,
       song: {
         id: ytdl.getVideoID(url.toString()),
         site: 'youtube',

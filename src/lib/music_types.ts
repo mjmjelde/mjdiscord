@@ -6,6 +6,7 @@ import * as ytdl from "ytdl-core";
 export interface MusicItem {
   textChannel: TextChannel | DMChannel | NewsChannel;
   voiceChannel: VoiceChannel;
+  sendToText: boolean;
   song: Song;
 }
 
@@ -62,7 +63,9 @@ export class MusicGuild {
       this.voiceConnection = await this.nowPlaying.voiceChannel.join();
     }
 
-    this.nowPlaying.textChannel.send(`Now playing: ${(await ytdl.getInfo(this.nowPlaying.song.id)).title}`);
+    if (this.nowPlaying.sendToText) {
+      this.nowPlaying.textChannel.send(`Now playing: ${(await ytdl.getInfo(this.nowPlaying.song.id)).title}`);
+    }
     this.voiceConnection.play(getSongStream(this.nowPlaying.song), {volume: this.volume}).on("finish", () => {
       if (this.queue.length > 0) {
         this.nowPlaying = undefined;

@@ -20,6 +20,7 @@ import { TableFlipCommand } from "./command/tableflip";
 import { RandomClassCommand } from "./command/random_class";
 import { RandomComicCommand } from "./command/random_comic";
 import { BeerCommand } from "./command/beer";
+import { WTFCommand } from "./command/music/wtf";
 
 const client = new Client();
 client.login(config.get("client_key"));
@@ -37,6 +38,8 @@ commands.push(new DadCommand());
 commands.push(new PlayCommand());
 commands.push(new SkipCommand());
 commands.push(new StopCommand());
+commands.push(new WTFCommand());
+
 commands.push(new TeamCommand());
 commands.push(new MagicEightBallCommand());
 commands.push(new TableFlipCommand());
