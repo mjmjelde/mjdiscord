@@ -28,13 +28,13 @@ export class MusicGuild {
   private queue: MusicItem[];
   private nowPlaying: MusicItem;
   private voiceConnection: VoiceConnection;
-  private volume: number;
+  private _volume: number;
 
   constructor() {
     this.queue = [];
     this.nowPlaying = undefined;
     this.voiceConnection = undefined;
-    this.volume = 0.75;
+    this._volume = 0.75;
   }
 
   get isPlaying(): boolean {
@@ -42,6 +42,10 @@ export class MusicGuild {
       return false;
     }
     return this.voiceConnection.dispatcher && !this.voiceConnection.dispatcher.paused;
+  }
+
+  get volume(): number {
+    return this._volume;
   }
 
   public async play(): Promise<MusicItem> {
@@ -82,7 +86,7 @@ export class MusicGuild {
     } else if (vol < 0) {
       vol = 0;
     }
-    this.volume = vol;
+    this._volume = vol;
     if (this.isPlaying) {
       this.voiceConnection.dispatcher.setVolume(this.volume);
     }

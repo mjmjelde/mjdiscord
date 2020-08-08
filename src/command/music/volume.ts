@@ -20,11 +20,16 @@ export class VolumeCommand implements AbstractCommand {
       return;
     }
 
+    const guild = msg.guild as MjGuildInterface;
+
     const commandArgs = new CommandArgs(msg.client, msg.content);
     commandArgs.pop();
+    if (commandArgs.atEnd()) {
+      msg.reply(`Volume is currently ${guild.music.volume}`);
+      return;
+    }
+    
     const vol = parseFloat(commandArgs.pop());
-
-    const guild = msg.guild as MjGuildInterface;
     await guild.music.setVolume(vol);
     msg.reply(`Volume set to ${vol}`);
   }
