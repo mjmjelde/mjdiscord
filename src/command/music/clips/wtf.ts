@@ -1,7 +1,7 @@
-import { AbstractCommand } from "../abstract_command";
+import { AbstractCommand } from "../../abstract_command";
 
-import { getCommand, commandCharacter } from "../../util/command";
-import { MjGuildInterface } from "../../lib/guild_types";
+import { getCommand, commandCharacter } from "../../../util/command";
+import { MjGuildInterface } from "../../../lib/guild_types";
 import { Message, PartialMessage, DMChannel } from "discord.js";
 
 export class WTFCommand implements AbstractCommand {
