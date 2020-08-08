@@ -7,7 +7,7 @@ import { createReadStream } from "fs";
 export function getSongStream(song: Song): Readable {
   switch (song.site) {
     case 'youtube':
-      return ytdl(song.url);
+      return ytdl(song.url, {quality: 'highestaudio', filter: 'audioonly'});
     case 'file':
       return createReadStream(`./audio/${song.url}.ogg`);
     default:
