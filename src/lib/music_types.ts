@@ -34,7 +34,7 @@ export class MusicGuild {
     this.queue = [];
     this.nowPlaying = undefined;
     this.voiceConnection = undefined;
-    this.volume = 1;
+    this.volume = 0.75;
   }
 
   get isPlaying(): boolean {
@@ -77,6 +77,11 @@ export class MusicGuild {
   }
 
   public async setVolume(vol: number) {
+    if(vol > 2) {
+      vol = 2;
+    } else if (vol < 0) {
+      vol = 0;
+    }
     this.volume = vol;
     if (this.isPlaying) {
       this.voiceConnection.dispatcher.setVolume(this.volume);

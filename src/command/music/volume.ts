@@ -8,7 +8,8 @@ export class VolumeCommand implements AbstractCommand {
   should_execute(msg: Message | PartialMessage): boolean {
     return getCommand(msg) == "volume";
   }
-  execute(msg: Message | PartialMessage): void {
+
+  async execute(msg: Message | PartialMessage): Promise<void> {
     if (msg.channel instanceof DMChannel) {
       msg.reply("Please use this command in a guild channel");
       return;
@@ -24,8 +25,10 @@ export class VolumeCommand implements AbstractCommand {
     const vol = parseFloat(commandArgs.pop());
 
     const guild = msg.guild as MjGuildInterface;
-    guild.music.setVolume(vol);
+    await guild.music.setVolume(vol);
+    msg.reply(`Volume set to ${vol}`);
   }
+
   help(): string {
     return commandCharacter() + "volume <number> : Sets the volume of the bot";
   }
