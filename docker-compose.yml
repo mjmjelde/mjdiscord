@@ -4,3 +4,7 @@ services:
     build: .
     image: mjmjelde/mjdiscord
     restart: unless-stopped
+    volumes:
+      - "mjbotdada:/opt/mjdiscord/data"
+volumes: 
+  mjbotdada
