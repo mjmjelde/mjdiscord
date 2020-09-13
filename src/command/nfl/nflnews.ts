@@ -31,7 +31,7 @@ export class NFLNewsCommand implements AbstractCommand {
     }
     
     if (this.channels.includes(msg.channel)) {
-      this.channels.splice(this.channels.indexOf(msg.channel, 1));
+      this.channels.splice(this.channels.indexOf(msg.channel), 1);
       msg.reply('This channel has been removed from the NFL News notifications');
     } else {
       this.channels.push(msg.channel);
