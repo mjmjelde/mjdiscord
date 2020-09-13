@@ -14,7 +14,7 @@ export class RSSWatcher extends EventEmitter {
     super();
     this.feedURL = url;
     this.rssParser = new Parser();
-    // this.lastDate = Date.now();
+    this.lastDate = Date.now();
     this.timer = setInterval(this.fetchFeed.bind(this), this.interval);
   }
 
