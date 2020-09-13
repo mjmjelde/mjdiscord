@@ -47,8 +47,7 @@ export class NFLNewsCommand implements AbstractCommand {
     const msg = new MessageEmbed();
     msg.setTitle(item.title);
     msg.setURL(item.link);
-    console.log(item);
-    msg.setDescription(item.description.replace('Visit RotoWire.com for more analysis on this update.', ''));
+    msg.setDescription(item.content.replace('Visit RotoWire.com for more analysis on this update.', '').trim());
     for (const channel of this.channels) {
       if (channel instanceof TextChannel || channel instanceof DMChannel) {
         channel.send(msg);
