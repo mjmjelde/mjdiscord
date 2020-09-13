@@ -24,6 +24,7 @@ import { WTFCommand } from "./command/music/clips/wtf";
 import { VolumeCommand } from "./command/music/volume";
 import { YEETCommand } from "./command/music/clips/yeet";
 import { NFLNewsCommand } from "./command/nfl/nflnews";
+import { baseDir, dataDir } from "./util/data";
 
 const client = new Client();
 client.login(config.get("client_key"));
@@ -82,3 +83,5 @@ client.on('ready', () => {
 });
 
 console.log('Starting bot...');
+console.log(`Base Dir: ${baseDir()}`);
+console.log(`Data Dir: ${dataDir()}`);
