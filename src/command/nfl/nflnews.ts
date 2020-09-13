@@ -37,6 +37,7 @@ export class NFLNewsCommand implements AbstractCommand {
       this.channels.push(msg.channel);
       msg.reply('This channel will now receive NFL News notifications');
     }
+    this.saveData();
   }
 
   help(): string {
