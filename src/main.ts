@@ -23,6 +23,7 @@ import { BeerCommand } from "./command/beer";
 import { WTFCommand } from "./command/music/clips/wtf";
 import { VolumeCommand } from "./command/music/volume";
 import { YEETCommand } from "./command/music/clips/yeet";
+import { NFLNewsCommand } from "./command/nfl/nflnews";
 
 const client = new Client();
 client.login(config.get("client_key"));
@@ -43,6 +44,9 @@ commands.push(new StopCommand());
 commands.push(new WTFCommand());
 commands.push(new YEETCommand());
 commands.push(new VolumeCommand());
+
+//NFL Commands
+commands.push(new NFLNewsCommand(client));
 
 commands.push(new TeamCommand());
 commands.push(new MagicEightBallCommand());
