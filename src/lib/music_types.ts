@@ -68,7 +68,7 @@ export class MusicGuild {
     }
 
     if (this.nowPlaying.sendToText) {
-      this.nowPlaying.textChannel.send(`Now playing: ${(await ytdl.getInfo(this.nowPlaying.song.id)).title}`);
+      this.nowPlaying.textChannel.send(`Now playing: ${(await ytdl.getInfo(this.nowPlaying.song.id)).videoDetails.title}`);
     }
     this.voiceConnection.play(getSongStream(this.nowPlaying.song), {volume: this.volume}).on("finish", () => {
       if (this.queue.length > 0) {

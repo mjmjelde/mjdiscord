@@ -78,7 +78,7 @@ export class BeerCommand implements AbstractCommand {
     const titles = $('.beerstats > dt');
     const values = $('.beerstats > dd');
     let style, abv, brewer, location, score;
-    titles.each((index: number, elem: CheerioElement) => {
+    titles.each((index: number, elem: cheerio.Element) => {
       const text = $(elem).text().toLowerCase();
       if (text.includes("style")) {
         style = $(values[index]).text().trim().replace(/Ranked #[0-9]+/, "");
