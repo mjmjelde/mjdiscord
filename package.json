@@ -14,8 +14,8 @@
     "axios": "^0.19.2",
     "canvas": "^2.6.1",
     "cheerio": "^1.0.0-rc.3",
-    "config": "^3.3.2",
-    "discord.js": "^12.4.1",
+    "config": "^3.3.3",
+    "discord.js": "^12.5.1",
     "giphy-api": "^2.0.1",
     "luxon": "^1.25.0",
     "node-html-parser": "^1.4.9",
@@ -29,6 +29,6 @@
     "@types/cheerio": "^0.22.22",
     "@types/config": "0.0.36",
     "@types/luxon": "^1.25.0",
-    "@types/node": "^13.13.31"
+    "@types/node": "^13.13.34"
   }
 }
