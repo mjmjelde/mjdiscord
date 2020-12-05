@@ -22,7 +22,7 @@
     "rss-parser": "^3.9.0",
     "typescript": "^3.9.7",
     "xml2js": "^0.4.23",
-    "ytdl-core": "^4.0.0",
+    "ytdl-core": "^4.1.2",
     "ytpl": "^0.1.22"
   },
   "devDependencies": {
