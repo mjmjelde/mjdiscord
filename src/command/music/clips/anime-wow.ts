@@ -4,9 +4,9 @@ import { getCommand, commandCharacter } from "../../../util/command";
 import { MjGuildInterface } from "../../../lib/guild_types";
 import { Message, PartialMessage, DMChannel } from "discord.js";
 
-export class YEETCommand implements AbstractCommand {
+export class AnimeWowCommand implements AbstractCommand {
   should_execute(msg: Message | PartialMessage): boolean {
-    return ['yeet'].includes(getCommand(msg).toLowerCase());
+    return ['wow'].includes(getCommand(msg).toLowerCase());
   }
   execute(msg: Message | PartialMessage): void {
     if (msg.channel instanceof DMChannel) {
@@ -29,12 +29,12 @@ export class YEETCommand implements AbstractCommand {
       song: {
         id: '0',
         site: 'file',
-        url: 'yeet2'
+        url: 'anime-wow'
       }
     });
     guild.music.play();
   }
   help(): string {
-    return commandCharacter() + "yeet : Plays a yeet sound";
+    return commandCharacter() + "wow : Plays a wow sound";
   }
 }

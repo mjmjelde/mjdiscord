@@ -25,6 +25,8 @@ import { VolumeCommand } from "./command/music/volume";
 import { YEETCommand } from "./command/music/clips/yeet";
 import { NFLNewsCommand } from "./command/nfl/nflnews";
 import { baseDir, dataDir } from "./util/data";
+import { NutCommand } from "./command/music/clips/nut";
+import { AnimeWowCommand } from "./command/music/clips/anime-wow";
 
 const client = new Client();
 client.login(config.get("client_key"));
@@ -44,6 +46,8 @@ commands.push(new SkipCommand());
 commands.push(new StopCommand());
 commands.push(new WTFCommand());
 commands.push(new YEETCommand());
+commands.push(new NutCommand());
+commands.push(new AnimeWowCommand());
 commands.push(new VolumeCommand());
 
 //NFL Commands
