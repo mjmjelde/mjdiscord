@@ -6,5 +6,7 @@ services:
     restart: unless-stopped
     volumes:
       - "mjbotdada:/opt/mjdiscord/data"
+      - "./config:/opt/mjdiscord/config"
+      - "./audio:/opt/mjdiscord/audio"
 volumes: 
   mjbotdada:
