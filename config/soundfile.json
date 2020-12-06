@@ -10,5 +10,17 @@
   {
     "name": "gotem",
     "help": "gotem : HA! Got em!"
+  },
+  {
+    "name": "fuckedup",
+    "help": "fuckedup : That's fucked up"
+  },
+  {
+    "name": "hellno",
+    "help": "hellno : Aww hell no"
+  },
+  {
+    "name": "myman",
+    "help": "help : My man!"
   }
 ]
