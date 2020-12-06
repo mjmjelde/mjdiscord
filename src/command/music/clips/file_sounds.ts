@@ -24,11 +24,11 @@ export class FileSoundsCommands implements AbstractCommand {
   }
 
   should_execute(msg: Message | PartialMessage): boolean {
-    return getCommand(msg).toLocaleLowerCase() in this.commands.map(f => f.name);
+    return this.commands.map(f => f.name).includes(getCommand(msg).toLowerCase()) ;
   }
 
   execute(msg: Message | PartialMessage): void {
-    const command = getCommand(msg).toLocaleLowerCase();
+    const command = getCommand(msg).toLowerCase();
     let sound : SoundFile = undefined;
     for (const com of this.commands) {
       if(command == com.name) {
