@@ -63,7 +63,7 @@ export class MusicGuild {
       return undefined;
     }
 
-    const stream = await getSongStream(this.nowPlaying.song);
+    const streamData = await getSongStream(this.nowPlaying.song);
 
     if (!this.voiceConnection || (this.voiceConnection.channel.id != this.nowPlaying.voiceChannel.id)) {
       this.voiceConnection = await this.nowPlaying.voiceChannel.join();
@@ -73,14 +73,14 @@ export class MusicGuild {
       this.nowPlaying.textChannel.send(`Now playing: ${(await ytdl.getInfo(this.nowPlaying.song.id)).videoDetails.title}`);
     }
 
-    if (stream == undefined) {
+    if (streamData == undefined) {
       console.log('Song stream is undefined!');
       this.nowPlaying = undefined;
       this.play();
       return;
     }
 
-    this.voiceConnection.play(stream.stream, {type: stream.type, volume: this.volume, highWaterMark: 50}).on("finish", () => {
+    this.voiceConnection.play(streamData.stream, {type: streamData.type, volume: this.volume, highWaterMark: 50}).on("finish", () => {
       if (this.queue.length > 0) {
         this.nowPlaying = undefined;
         this.play();

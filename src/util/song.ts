@@ -21,7 +21,7 @@ export async function getSongStream(song: Song): Promise<SoundStream> {
       };
     case 'file':
       return {
-        type: 'ogg/opus',
+        type: undefined,
         stream: createReadStream(`./audio/${song.url}.ogg`),
       }
     default:
