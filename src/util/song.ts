@@ -4,14 +4,26 @@ import * as ytdl from 'ytdl-core';
 import { Readable } from "stream";
 import { createReadStream } from "fs";
 import { download } from "./youtube";
+import { StreamType } from "discord.js";
 
-export async function getSongStream(song: Song): Promise<string|Readable> {
+export interface SoundStream {
+  type: StreamType;
+  stream: Readable
+}
+
+export async function getSongStream(song: Song): Promise<SoundStream> {
   switch (song.site) {
     case 'youtube':
       // return ytdl(song.url, {quality: 'highestaudio', filter: 'audioonly'});
-      return download(song.url);
+      return {
+        type: 'opus',
+        stream: await download(song.url),
+      };
     case 'file':
-      return createReadStream(`./audio/${song.url}.ogg`)
+      return {
+        type: 'ogg/opus',
+        stream: createReadStream(`./audio/${song.url}.ogg`),
+      }
     default:
       return undefined;
   }

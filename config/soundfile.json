@@ -1,0 +1,14 @@
+[
+  {
+    "name": "turtle",
+    "help": "turtle : Plays a special turtle sound"
+  },
+  {
+    "name": "chill",
+    "help": "chill : Chill out man"
+  },
+  {
+    "name": "gotem",
+    "help": "gotem : HA! Got em!"
+  }
+]

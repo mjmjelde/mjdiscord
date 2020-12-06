@@ -80,7 +80,7 @@ export class MusicGuild {
       return;
     }
 
-    this.voiceConnection.play(stream, {volume: this.volume, highWaterMark: 50}).on("finish", () => {
+    this.voiceConnection.play(stream.stream, {type: stream.type, volume: this.volume, highWaterMark: 50}).on("finish", () => {
       if (this.queue.length > 0) {
         this.nowPlaying = undefined;
         this.play();
