@@ -22,5 +22,9 @@
   {
     "name": "myman",
     "help": "help : My man!"
+  },
+  {
+    "name": "hotdog",
+    "help": "DUHN DUHN HOTDOG"
   }
 ]
