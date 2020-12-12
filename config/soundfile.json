@@ -25,6 +25,10 @@
   },
   {
     "name": "hotdog",
-    "help": "DUHN DUHN HOTDOG"
+    "help": "hotdog : DUHN DUHN HOTDOG"
+  },
+  {
+    "name": "mando",
+    "help": "mando : This is the way"
   }
 ]
