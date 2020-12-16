@@ -3,6 +3,7 @@ import { AbstractCommand } from "./abstract_command";
 import { Message, PartialMessage, Client, DMChannel, Collection, Snowflake, GuildMember, MessageEmbed, GuildChannel, VoiceChannel } from "discord.js";
 import { commandCharacter, getCommand } from "../util/command";
 import { CommandArgs } from "../util/command_args";
+import { delay } from "../util/time";
 
 export class TeamCommand implements AbstractCommand {
   should_execute(msg: Message | PartialMessage): boolean {
@@ -102,6 +103,7 @@ export class TeamCommand implements AbstractCommand {
           for (const gm of teams[i]) {
             const chan = chans.array()[i];
             await gm.voice.setChannel(chan);
+            await delay(500);
           }
         }
       } else {
