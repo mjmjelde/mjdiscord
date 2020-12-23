@@ -86,7 +86,6 @@ const randomStatus = [
 
 async function setPresence() {
   const status = randomStatus[randomIntFromInterval(0, randomStatus.length - 1)];
-  console.log(`Setting bot status to: ${status}`);
   const pres = await client.user.setPresence(
     {
       status: "online",
@@ -96,7 +95,6 @@ async function setPresence() {
       } 
     }
   );
-  console.log(pres);
 }
 
 client.on('ready', () => {
