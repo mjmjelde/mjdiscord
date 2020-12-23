@@ -21,7 +21,7 @@
   },
   {
     "name": "myman",
-    "help": "help : My man!"
+    "help": "myman : My man!"
   },
   {
     "name": "hotdog",

@@ -28,6 +28,7 @@ import { baseDir, dataDir } from "./util/data";
 import { NutCommand } from "./command/music/clips/nut";
 import { AnimeWowCommand } from "./command/music/clips/anime_wow";
 import { FileSoundsCommands } from "./command/music/clips/file_sounds";
+import { randomIntFromInterval } from "./util/numbers";
 
 const client = new Client();
 client.login(config.get("client_key"));
@@ -63,10 +64,38 @@ commands.push(new RandomComicCommand());
 commands.push(new BeerCommand());
 commands.push(new HelpCommand(commands)); // Do this one last because of passing commands to it!
 
+const randomStatus = [
+  "If Minecraft taught me one thing, it's to never spend diamonds on a hoe",
+  "You make me wanna throw a flashbang into a room full of epileptic kids",
+  "When I was a kid I wanted 2 pieces of pie instead of 1.  My mom cut one slice in half and gave them to me.  Naturally, I was happy",
+  "I use a ruler to see how long I sleep 📏",
+  "🧾 No, I checked my receipt.  I didn't buy any of your bullshit",
+  "The first thing a man looks at in a woman is her heart.  The fact that her boobs are in front of her is not his fault.",
+  "Can orphans eat at a family restaurant?"
+]
+
+function setPresence() {
+  client.user.setPresence(
+    {
+      status: "online",
+      activity:{
+        name: randomStatus[randomIntFromInterval(0, randomStatus.length - 1)],
+        type: "CUSTOM_STATUS"
+      } 
+    }
+  );
+}
+
 client.on('ready', () => {
   client.guilds.cache.forEach((guild) => {
     console.log(guild.name);
   });
+
+  
+  setPresence();
+  setInterval(() => {
+    setPresence();
+  }, 15 * 60 * 1000);
 
   client.on('message', message => {
 

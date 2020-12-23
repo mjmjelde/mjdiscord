@@ -100,10 +100,10 @@ export class TeamCommand implements AbstractCommand {
       if (collected.first() && (collected.first().emoji.name == '👍')) {
         console.log("Moving everyone to correct channels...");
         for (let i = 0; i < teams.length; i++) {
+          const chan = chans.array()[i];
           for (const gm of teams[i]) {
-            const chan = chans.array()[i];
             await gm.voice.setChannel(chan);
-            await delay(500);
+            await delay(1001);
           }
         }
       } else {
