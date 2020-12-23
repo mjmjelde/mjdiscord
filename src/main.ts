@@ -71,7 +71,17 @@ const randomStatus = [
   "I use a ruler to see how long I sleep 📏",
   "🧾 No, I checked my receipt.  I didn't buy any of your bullshit",
   "The first thing a man looks at in a woman is her heart.  The fact that her boobs are in front of her is not his fault.",
-  "Can orphans eat at a family restaurant?"
+  "Can orphans eat at a family restaurant?",
+  "How come a man driving a train got struck by lightning? He was a good conductor.",
+  "I want to be the reason someone looks and smiles at their phone, then walks into a pole",
+  "There's nothing stronger than love... except a M32 Rotary Grenade Launcher",
+  "I've only been outside 0 days in the last 243 days",
+  "If you are going to fight, fight like there is one chair left in musical chairs... and the music is about to stop",
+  "You have never seen me and the KoolAid man in the same room before... just saying",
+  "Told the depressed kid to hang in there",
+  "95% swag... I lost the other 5% talking to you",
+  "Some people just need a high-five... in the face... with a chair.",
+  "Can you be the :// to my https ? 😉"
 ]
 
 async function setPresence() {
