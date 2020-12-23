@@ -34,7 +34,7 @@ export class PlayCommand implements AbstractCommand {
     }
 
     if (/(music.)?youtu(be.com|.be)/.test(url.host)) {
-      if (ytpl.validateURL(url.toString())) {
+      if (ytpl.validateID(url.toString())) {
         await this.askToAddYoutubePlaylist(msg, url);
       } else {
         await this.addYoutubeSong(msg, url);
