@@ -74,16 +74,19 @@ const randomStatus = [
   "Can orphans eat at a family restaurant?"
 ]
 
-function setPresence() {
-  client.user.setPresence(
+async function setPresence() {
+  const status = randomStatus[randomIntFromInterval(0, randomStatus.length - 1)];
+  console.log(`Setting bot status to: ${status}`);
+  const pres = await client.user.setPresence(
     {
       status: "online",
       activity:{
-        name: randomStatus[randomIntFromInterval(0, randomStatus.length - 1)],
-        type: "CUSTOM_STATUS"
+        name: status,
+        type: "PLAYING"
       } 
     }
   );
+  console.log(pres);
 }
 
 client.on('ready', () => {
