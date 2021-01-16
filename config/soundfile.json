@@ -30,5 +30,9 @@
   {
     "name": "mando",
     "help": "mando : This is the way"
+  },
+  {
+    "name": "cracked",
+    "help": "cracked : This guy is cracked"
   }
 ]

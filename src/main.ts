@@ -29,6 +29,7 @@ import { NutCommand } from "./command/music/clips/nut";
 import { AnimeWowCommand } from "./command/music/clips/anime_wow";
 import { FileSoundsCommands } from "./command/music/clips/file_sounds";
 import { randomIntFromInterval } from "./util/numbers";
+import { MiddleFingerCommand } from "./command/middlefinger";
 
 const client = new Client();
 client.login(config.get("client_key"));
@@ -41,6 +42,7 @@ commands.push(new ReactCommand(client));
 commands.push(new GiphyCommand());
 commands.push(new ChuckCommand());
 commands.push(new DadCommand());
+commands.push(new MiddleFingerCommand());
 // commands.push(new MovieCommand(config.get("radarr.baseurl"), config.get("radarr.apikey")));
 //Music commands
 commands.push(new PlayCommand());
