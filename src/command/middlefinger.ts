@@ -12,17 +12,6 @@ export class MiddleFingerCommand implements AbstractCommand {
   }
 
   async execute(msg: Message | PartialMessage) {
-    msg.channel.send(
-      "....................../´¯/)\n" + 
-      "....................,/¯../ \n" + 
-      ".................../..../ \n" + 
-      "............./´¯/'...'/´¯¯`·¸ \n" + 
-      "........../'/.../..../......./¨¯\\ \n" + 
-      "........('(...´...´.... ¯~/'...') \n" + 
-      ".........\.................'...../ \n" + 
-      "..........''...\.......... _.·´ \n" + 
-      "............\..............( \n" + 
-      "..............\.............\...\n"
-    )
+    msg.channel.send("https://tenor.com/view/baby-girl-middle-finger-mood-screw-you-leave-me-alone-gif-10174031")
   }
 }
