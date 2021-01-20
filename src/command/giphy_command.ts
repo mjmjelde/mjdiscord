@@ -5,6 +5,7 @@ import * as giphyapi from 'giphy-api';
 import { commandCharacter, getCommand } from '../util/command';
 import { CommandArgs } from '../util/command_args';
 import Axios, { AxiosInstance } from 'axios';
+import { randomIntFromInterval } from '../util/numbers';
 
 export class GiphyCommand implements AbstractCommand {
 
@@ -33,19 +34,39 @@ export class GiphyCommand implements AbstractCommand {
         const args = new CommandArgs(msg.client, msg.content);
         args.pop(); // pop off the command arg
         if (args.atEnd()) {
-            this.giphy.random().then(image => {
-                msg.channel.send(image.data.url);
-            });
+            this.axios.get('/random').then(results => {
+                msg.channel.send(results.data.data.url);
+            })
+            // this.giphy.random().then(image => {
+            //     msg.channel.send(image.data.url);
+            // });
         } else {
             const keyword = args.restToString();
-            this.giphy.search({q: keyword}).then(image => {
-                if (image.data){
-                    const item = image.data[Math.floor(Math.random() * image.data.length)];
+            console.log(`Searching Giphy for ${keyword}`);
+            this.axios.get('/search', {
+                params: {
+                    q: keyword,
+                    api_key: config.get("giphy.apikey")
+                }
+            }).then((results) => {
+                if (results.data.data) {
+                    const gifresults = results.data;
+                    const item = gifresults.data[randomIntFromInterval(0, Math.min(10, gifresults.pagination.count))];
                     msg.channel.send(item.url);
                 } else {
-                    msg.reply(`no gifs found for ${keyword}`);
+                    msg.reply(`No gifs found for: ${keyword}`);
                 }
+            }).catch((err) => {
+                console.log(err);
             });
+            // this.giphy.search({q: keyword}).then(image => {
+            //     if (image.data){
+            //         const item = image.data[Math.floor(Math.random() * image.data.length)];
+            //         msg.channel.send(item.url);
+            //     } else {
+            //         msg.reply(`no gifs found for ${keyword}`);
+            //     }
+            // });
         }
     }
 
