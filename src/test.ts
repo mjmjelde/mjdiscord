@@ -1,9 +1,16 @@
-import * as ytdl from 'ytdl-core';
-import { createWriteStream } from 'fs';
+import {Finnhub} from './lib/stocks/finnhub';
 
-ytdl('https://www.youtube.com/watch?v=2jmfcW0WP94', {quality: 'highestaudio', filter: 'audioonly'}).pipe(createWriteStream('video-audio.mp4'))
-// ytdl.getInfo('https://www.youtube.com/watch?v=2jmfcW0WP94').then((data) => {
-//   let formats = ytdl.filterFormats(data.formats, 'audioonly');
-//   console.log(formats.length);
-//   console.log(JSON.stringify(formats));
-// })
+const finn = new Finnhub('c090skf48v6tm13rkbb0');
+
+async function test() {
+  const symbols = await finn.symbols();
+  const GMESymbol = symbols.find(c => c.symbol == "GME");
+  const APPLSymbol = symbols.find(c => c.symbol == "AAPL");
+  console.log(APPLSymbol);
+  const GMEProfile = await finn.profile2(GMESymbol);
+  console.log(GMEProfile);
+  const quote = await finn.quote(GMESymbol);
+  console.log(quote);
+}
+
+test();

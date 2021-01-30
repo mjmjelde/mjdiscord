@@ -21,6 +21,7 @@
     "node-html-parser": "^1.4.9",
     "rss-parser": "^3.9.0",
     "typescript": "^3.9.7",
+    "ws": "^7.4.2",
     "xml2js": "^0.4.23",
     "ytdl-core": "^4.2.1",
     "ytpl": "^2.0.4"
@@ -29,6 +30,7 @@
     "@types/cheerio": "^0.22.22",
     "@types/config": "0.0.36",
     "@types/luxon": "^1.25.0",
-    "@types/node": "^13.13.34"
+    "@types/node": "^13.13.34",
+    "@types/ws": "^7.4.0"
   }
 }

@@ -103,7 +103,7 @@ export class TeamCommand implements AbstractCommand {
           const chan = chans.array()[i];
           for (const gm of teams[i]) {
             await gm.voice.setChannel(chan);
-            await delay(1001);
+            await delay(300);
           }
         }
       } else {

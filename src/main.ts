@@ -30,6 +30,7 @@ import { AnimeWowCommand } from "./command/music/clips/anime_wow";
 import { FileSoundsCommands } from "./command/music/clips/file_sounds";
 import { randomIntFromInterval } from "./util/numbers";
 import { MiddleFingerCommand } from "./command/middlefinger";
+import { StockCommand } from "./command/stocks/stock";
 
 const client = new Client();
 client.login(config.get("client_key"));
@@ -57,6 +58,9 @@ commands.push(new VolumeCommand());
 
 //NFL Commands
 commands.push(new NFLNewsCommand(client));
+
+//Stock commands
+commands.push(new StockCommand());
 
 commands.push(new TeamCommand());
 commands.push(new MagicEightBallCommand());
