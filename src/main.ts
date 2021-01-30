@@ -109,10 +109,10 @@ client.on('ready', () => {
   });
 
   
-  setPresence();
-  setInterval(() => {
-    setPresence();
-  }, 15 * 60 * 1000);
+  // setPresence();
+  // setInterval(() => {
+  //   setPresence();
+  // }, 15 * 60 * 1000);
 
   client.on('message', message => {
 

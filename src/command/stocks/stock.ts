@@ -36,12 +36,17 @@ export class StockCommand implements AbstractCommand {
       embed.setTitle(profile.name);
       embed.setThumbnail(profile.logo);
       embed.addFields(
-        {name: 'Current Price', value: quote.c.toString()},
+        {name: 'Current Price', value: `$${quote.c.toString()}\n`},
         // {name: '', value: ''},
-        {name: '\u200B', value: '\u200B' },
-        {name: 'Open', value: quote.o.toString()},
-        {name: 'Close', value: quote.c.toString()},
+        // {name: '\u200B', value: '\u200B' },
+        {name: 'Open', value: `$${quote.o.toString()}`, inline: true},
+        {name: 'Close', value: `$${quote.c.toString()}`, inline: true},
+        // {name: '\u200B', value: '\u200B' },
+        {name: 'Low', value: `$${quote.l.toString()}`, inline: true},
+        {name: 'High', value: `$${quote.h.toString()}`, inline: true},
+        
       );
+      embed.setImage(`https://elite.finviz.com/chart.ashx?t=${symbol.symbol}&ty=c&ta=st_c,sch_200p&p=i5&s=1`)
       msg.channel.send(embed);
     }).catch(err => {
       msg.reply(`There was an error looking up ${stock}, please try again later`);
