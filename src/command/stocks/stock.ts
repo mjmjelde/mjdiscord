@@ -45,6 +45,7 @@ export class StockCommand implements AbstractCommand {
       msg.channel.send(embed);
     }).catch(err => {
       msg.reply(`There was an error looking up ${stock}, please try again later`);
+      console.log(err);
     })
   }
   help(): string {
