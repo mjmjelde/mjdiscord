@@ -1,5 +1,5 @@
 import { AxiosAdapter, AxiosRequestConfig, AxiosResponse } from 'axios';
-import Bucket from './Bucket';
+import Bucket from './bucket';
 
 export interface Headers {
   global: string;
