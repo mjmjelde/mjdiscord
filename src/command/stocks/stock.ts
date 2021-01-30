@@ -37,7 +37,7 @@ export class StockCommand implements AbstractCommand {
       embed.setThumbnail(profile.logo);
       embed.addFields(
         {name: 'Current Price', value: quote.c.toString()},
-        {name: '', value: ''},
+        // {name: '', value: ''},
         {name: '\u200B', value: '\u200B' },
         {name: 'Open', value: quote.o.toString()},
         {name: 'Close', value: quote.c.toString()},
