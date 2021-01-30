@@ -24,7 +24,7 @@ export class StockCommand implements AbstractCommand {
   }
 
   async execute(msg: Message | PartialMessage) {
-    const stock = msg.content.replace(/\$/, '').trim();
+    const stock = msg.content.replace(/\$/, '').trim().toUpperCase();
     const symbol = this.stock_symbols.find(c => c.symbol == stock);
     const profile = await this.client.profile2(symbol);
     if (!symbol) {
