@@ -26,11 +26,11 @@ export class StockCommand implements AbstractCommand {
   async execute(msg: Message | PartialMessage) {
     const stock = msg.content.replace(/\$/, '').trim().toUpperCase();
     const symbol = this.stock_symbols.find(c => c.symbol == stock);
-    const profile = await this.client.profile2(symbol);
     if (!symbol) {
       msg.reply('Invalid stock symbol.');
       return;
     }
+    const profile = await this.client.profile2(symbol);
     this.client.quote(symbol).then((quote) => {
       const embed = new MessageEmbed();
       embed.setTitle(profile.name);
@@ -46,7 +46,7 @@ export class StockCommand implements AbstractCommand {
         {name: 'High', value: `$${quote.h.toString()}`, inline: true},
         
       );
-      embed.setImage(`https://elite.finviz.com/chart.ashx?t=${symbol.symbol}&ty=c&ta=st_c,sch_200p&p=i5&s=1`)
+      embed.setImage(`https://elite.finviz.com/chart.ashx?t=${symbol.symbol}&ty=c&ta=st_c,sch_200p&p=i5&s=1&x=${Math.random().toString(36).substr(2,9)}`)
       msg.channel.send(embed);
     }).catch(err => {
       msg.reply(`There was an error looking up ${stock}, please try again later`);
