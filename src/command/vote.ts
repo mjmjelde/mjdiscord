@@ -35,9 +35,16 @@ export class VoteCommand implements AbstractCommand {
 
     let amountFor = 0;
     let amountAgainst = 0;
+    let usersVoted: string[] = [];
 
     const filter: CollectorFilter = (reaction, user) => {
-      return ['👍', '👎'].includes(reaction.emoji.name);
+      let voted = false;
+      if (usersVoted.includes(user.id)) {
+        voted = true;
+      } else {
+        usersVoted.push(user.id);
+      }
+      return ['👍', '👎'].includes(reaction.emoji.name) && !voted;
     }
 
     const collector = replyMsg.createReactionCollector(filter, {time: time});
