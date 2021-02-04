@@ -14,7 +14,7 @@ export class VoteCommand implements AbstractCommand {
       msg.reply("You must be in a guild channel to run this command");
       return;
     }
-    
+
     const args = new CommandArgs(msg.client, msg.content);
     args.pop(); //Pop command off top first
 
@@ -49,8 +49,8 @@ export class VoteCommand implements AbstractCommand {
       }
     });
 
-    collector.on('end', collected => {
-      msg.reactions.removeAll();
+    collector.on('end', async collected => {
+      await replyMsg.reactions.removeAll();
       if (amountFor > amountAgainst) {
         msg.channel.send(`The vote passes! With ${amountFor} for and ${amountAgainst} against!`);
       } else {
