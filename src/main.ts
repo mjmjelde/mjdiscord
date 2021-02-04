@@ -31,6 +31,7 @@ import { FileSoundsCommands } from "./command/music/clips/file_sounds";
 import { randomIntFromInterval } from "./util/numbers";
 import { MiddleFingerCommand } from "./command/middlefinger";
 import { StockCommand } from "./command/stocks/stock";
+import { VoteCommand } from "./command/vote";
 
 const client = new Client();
 client.login(config.get("client_key"));
@@ -44,6 +45,8 @@ commands.push(new GifCommand());
 commands.push(new ChuckCommand());
 commands.push(new DadCommand());
 commands.push(new MiddleFingerCommand());
+commands.push(new VoteCommand());
+
 // commands.push(new MovieCommand(config.get("radarr.baseurl"), config.get("radarr.apikey")));
 //Music commands
 commands.push(new PlayCommand());
