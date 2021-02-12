@@ -1,6 +1,4 @@
-const GoogleChartsNode = require('google-charts-node');
-
-declare var google;
+import { renderGoogleChart } from './google-charts/render';
 
 export async function getCandlestickChart(data: any): Promise<Buffer> {
     const t = `function drawChart() {
@@ -19,7 +17,7 @@ export async function getCandlestickChart(data: any): Promise<Buffer> {
         chart.draw(data, options);
     }`
 
-    return await GoogleChartsNode.render(t, {
+    return await renderGoogleChart(t, {
         width: 1920,
         height: 1080
     });
