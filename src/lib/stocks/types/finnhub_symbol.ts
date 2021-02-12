@@ -7,3 +7,9 @@ export interface FinnhubSymbol {
   symbol: string;
   type: string;
 }
+
+export interface FinnhubCryptoSymbol {
+  description: string;
+  displaySymbol: string;
+  symbol: string;
+}

@@ -1,10 +1,13 @@
 import Axios, { AxiosInstance } from "axios";
+import config = require("config");
 import { EventEmitter } from "events";
 import WebSocket = require("ws");
+import { getDayTimestamp } from "../../util/time";
 import ratelimiter from "../axios/axios_rate_limit";
+import { FinnhubCryptoCandle } from "./types/finnhub_candle";
 import { FinnhubProfile } from "./types/finnhub_profile";
 import { FinnhubQuote } from "./types/finnhub_quote";
-import { FinnhubSymbol } from "./types/finnhub_symbol";
+import { FinnhubCryptoSymbol, FinnhubSymbol } from "./types/finnhub_symbol";
 
 export interface FinnhubStockWebsocketMessage {
   type: 'subscribe' | 'unsubscribe';
@@ -113,4 +116,59 @@ export class Finnhub {
       })
     });
   }
+
+  get crypto(): FinnhubCrypto {
+    return new FinnhubCrypto(this.client);
+  }
 }
+
+export class FinnhubCrypto {
+  private client: AxiosInstance;
+
+  constructor(client: AxiosInstance) {
+    this.client = client;
+  }
+
+  public exchanges(): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      this.client.get("/crypto/exchange").then((resp) => {
+        resolve(resp.data);
+      }).catch((err) => {
+        reject(err);
+      })
+    })
+  }
+
+  public symbols(exchange: string): Promise<FinnhubCryptoSymbol[]> {
+    return new Promise((resolve, reject) => {
+      this.client.get("/crypto/symbol", {
+        params: {
+          exchange: exchange
+        }
+      }).then((resp) => {
+        resolve(resp.data);
+      }).catch(err => {
+        reject(err);
+      })
+    })
+  }
+
+  public candles(symbol: FinnhubCryptoSymbol, from: number = getDayTimestamp(), to: number = Date.now(), resolution: number = 5,): Promise<FinnhubCryptoCandle> {
+    return new Promise((resolve, reject) => {
+      this.client.get("/crypto/candle", {
+        params: {
+          symbol: symbol.symbol,
+          resolution: resolution,
+          from: from,
+          to: to,
+        }
+      }).then((resp) => {
+        resolve(resp.data);
+      }).catch((err) => {
+        reject(err);
+      })
+    })
+  }
+}
+
+export default new Finnhub(config.get('finnhub.apikey'));

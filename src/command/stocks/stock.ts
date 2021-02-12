@@ -1,5 +1,5 @@
 import { Message, MessageEmbed, PartialMessage } from "discord.js";
-import { Finnhub } from "../../lib/stocks/finnhub";
+import FinnhubClient, { Finnhub } from "../../lib/stocks/finnhub";
 import { AbstractCommand } from "../abstract_command";
 import * as config from 'config';
 import { FinnhubSymbol } from "../../lib/stocks/types/finnhub_symbol";
@@ -10,7 +10,8 @@ export class StockCommand implements AbstractCommand {
   private stock_symbols: FinnhubSymbol[];
 
   constructor() {
-    this.client = new Finnhub(config.get('finnhub.apikey'));
+    // this.client = new Finnhub(config.get('finnhub.apikey'));
+    this.client = FinnhubClient;
     this.updateSymbols();
     setInterval(() => this.updateSymbols(), 24 * 60 * 60 * 1000)
   }

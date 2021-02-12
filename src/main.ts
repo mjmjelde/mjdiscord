@@ -32,6 +32,7 @@ import { randomIntFromInterval } from "./util/numbers";
 import { MiddleFingerCommand } from "./command/middlefinger";
 import { StockCommand } from "./command/stocks/stock";
 import { VoteCommand } from "./command/vote";
+import { CryptoCommand } from "./command/stocks/crypto";
 
 const client = new Client();
 client.login(config.get("client_key"));
@@ -64,6 +65,7 @@ commands.push(new NFLNewsCommand(client));
 
 //Stock commands
 commands.push(new StockCommand());
+commands.push(new CryptoCommand());
 
 commands.push(new TeamCommand());
 commands.push(new MagicEightBallCommand());
