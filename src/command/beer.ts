@@ -1,6 +1,6 @@
 import { AbstractCommand } from "./abstract_command";
 import axios from 'axios';
-import { load } from 'cheerio';
+import * as cheerio from 'cheerio';
 import { Message, PartialMessage, MessageEmbed } from "discord.js";
 import { getCommand, commandCharacter } from "../util/command";
 import { CommandArgs } from "../util/command_args";
@@ -62,7 +62,7 @@ export class BeerCommand implements AbstractCommand {
   }
 
   private parseSearchPage(html: string): Promise<Beer> {
-    const $ = load(html);
+    const $ = cheerio.load(html);
     const firstBeer = $('#ba-content > div:nth-child(3) > div:nth-child(1) > a:nth-child(1)').attr('href');
     return new Promise<Beer>((resolve, reject) => {
       axios(`https://www.beeradvocate.com${firstBeer}`).then((resp) => {
@@ -74,7 +74,7 @@ export class BeerCommand implements AbstractCommand {
   }
 
   private parseBeerPage(html: string): Beer {
-    const $ = load(html);
+    const $ = cheerio.load(html);
     const titles = $('.beerstats > dt');
     const values = $('.beerstats > dd');
     let style, abv, brewer, location, score;
@@ -92,11 +92,15 @@ export class BeerCommand implements AbstractCommand {
       }
     });
     const img = $('#main_pic_norm > div > img').attr('src') == undefined ? $('#main_pic_norm > img').attr('src') : $('#main_pic_norm > div > img').attr('src');
+    const url = (Array.from($('meta')).filter(elemTemp => {
+      const elem = elemTemp as cheerio.TagElement;
+      return elem.attribs['property'] && elem.attribs['property'] == 'og:url'
+    }) as cheerio.TagElement[])[0].attribs['content'];
     console.log();
     return {
       name: $('h1').first().contents()[0].data,
       img,
-      url: Array.from($('meta')).filter(elem => elem.attribs['property'] && elem.attribs['property'] == 'og:url')[0].attribs['content'],
+      url,
       style,
       abv,
       brewer,

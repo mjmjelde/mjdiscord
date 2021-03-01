@@ -39,6 +39,7 @@ export class FinnhubSocket extends EventEmitter {
     if(this.debug) {
       console.log(`Message Received: ${event.data}`);
     }
+    this.emit('message', event);
   }
 
   public subscribe(symbol: string) {
@@ -53,10 +54,10 @@ export class FinnhubSocket extends EventEmitter {
 
 export class Finnhub {
   private client: AxiosInstance;
-  private socket: FinnhubSocket;
+  public socket: FinnhubSocket;
 
   constructor(key: string) {
-    this.socket = new FinnhubSocket(key);
+    this.socket = new FinnhubSocket(key, true);
     this.client = Axios.create({
       params: {
         token: key

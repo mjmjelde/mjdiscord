@@ -5,17 +5,20 @@ import * as config from 'config';
 import { FinnhubCryptoSymbol, FinnhubSymbol } from "../../lib/stocks/types/finnhub_symbol";
 import { getCandlestickChart } from "../../util/google_charts";
 import { formatAMPM, get24HoursAgoTimestamp } from "../../util/time";
+import { CommandArgs } from "../../util/command_args";
 
 export class CryptoCommand implements AbstractCommand {
 
   private client: Finnhub;
   private stock_symbols: FinnhubCryptoSymbol[];
 
+
   constructor() {
     // this.client = new Finnhub(config.get('finnhub.apikey'));
     this.client = FinnhubClient;
     this.updateSymbols();
-    setInterval(() => this.updateSymbols(), 24 * 60 * 60 * 1000)
+    setInterval(() => this.updateSymbols(), 24 * 60 * 60 * 1000);
+    
   }
 
   async updateSymbols() {
@@ -27,11 +30,23 @@ export class CryptoCommand implements AbstractCommand {
   }
 
   async execute(msg: Message | PartialMessage) {
-    const stock = msg.content.replace(/\#/, '').trim().toUpperCase();
+    const args = new CommandArgs(msg.client, msg.content);
+    args.pop();
+    const stock = args.pop().replace(/\#/, '').trim().toUpperCase();
     const symbol = this.stock_symbols.find(c => (c.displaySymbol == stock || `${stock}/USDT` == c.displaySymbol));
     if (!symbol) {
       msg.reply('Invalid stock symbol.');
       return;
+    }
+    if (!args.atEnd()) {
+      switch(args.pop()) {
+        case 'alert':
+
+          break;
+        default:
+          msg.reply('Invalid subcommand.  Please try again');
+          return;
+      }
     }
     const candles = await this.client.crypto.candles(symbol, get24HoursAgoTimestamp(), new Date().getTime(), 15);
     //Generate Candlestick Graph
