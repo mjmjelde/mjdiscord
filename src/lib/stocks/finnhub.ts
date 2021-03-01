@@ -57,7 +57,7 @@ export class Finnhub {
   public socket: FinnhubSocket;
 
   constructor(key: string) {
-    this.socket = new FinnhubSocket(key, true);
+    this.socket = new FinnhubSocket(key);
     this.client = Axios.create({
       params: {
         token: key

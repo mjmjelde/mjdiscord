@@ -142,3 +142,13 @@ client.on('ready', () => {
 console.log('Starting bot...');
 console.log(`Base Dir: ${baseDir()}`);
 console.log(`Data Dir: ${dataDir()}`);
+
+process.stdin.resume();
+process.stdin.setEncoding('utf8');
+
+process.stdin.on('data', text => {
+  if (text.toString('utf8').trim() == 'stop') {
+    console.log('Thanks for using MjBot!');
+    process.exit();
+  }
+});
