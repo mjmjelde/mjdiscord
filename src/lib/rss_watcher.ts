@@ -31,17 +31,22 @@ export class RSSWatcher extends EventEmitter {
   }
 
   private async fetchFeed() {
-    const feed = await this.rssParser.parseURL(this.feedURL);
-    const items = feed.items.sort((a,b) => {
-      return Date.parse(a.pubDate) - Date.parse(b.pubDate);
-    });
-    
-    for (const item of items) {
-      if(this.isNewItem(item)) {
-        console.log(`got item ${item.title}`);
-        this.emit('item', item);
-        this.updateLastDate(item);
+    try {
+      const feed = await this.rssParser.parseURL(this.feedURL);
+      const items = feed.items.sort((a,b) => {
+        return Date.parse(a.pubDate) - Date.parse(b.pubDate);
+      });
+      
+      for (const item of items) {
+        if(this.isNewItem(item)) {
+          console.log(`got item ${item.title}`);
+          this.emit('item', item);
+          this.updateLastDate(item);
+        }
       }
+    } catch (e) {
+      console.log('Error fetching NFL news feed.  Will try again later.');
+      console.error(e);
     }
   }
 
