@@ -31,7 +31,7 @@ export class CryptoCommand implements AbstractCommand {
 
   async execute(msg: Message | PartialMessage) {
     const args = new CommandArgs(msg.client, msg.content);
-    args.pop();
+    // args.pop();
     const stock = args.pop().replace(/\#/, '').trim().toUpperCase();
     const symbol = this.stock_symbols.find(c => (c.displaySymbol == stock || `${stock}/USDT` == c.displaySymbol));
     if (!symbol) {

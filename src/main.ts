@@ -149,6 +149,7 @@ process.stdin.setEncoding('utf8');
 process.stdin.on('data', text => {
   if (text.toString('utf8').trim() == 'stop') {
     console.log('Thanks for using MjBot!');
+    client.destroy();
     process.exit();
   }
 });

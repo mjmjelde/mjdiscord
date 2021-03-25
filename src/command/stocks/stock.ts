@@ -13,7 +13,7 @@ export class StockCommand implements AbstractCommand {
     // this.client = new Finnhub(config.get('finnhub.apikey'));
     this.client = FinnhubClient;
     this.updateSymbols();
-    setInterval(() => this.updateSymbols(), 24 * 60 * 60 * 1000)
+    setInterval(() => this.updateSymbols(), 60 * 60 * 1000)
   }
 
   async updateSymbols() {
