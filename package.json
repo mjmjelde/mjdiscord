@@ -13,26 +13,26 @@
     "@discordjs/opus": "^0.4.0",
     "axios": "^0.21.1",
     "canvas": "^2.7.0",
-    "cheerio": "^1.0.0-rc.5",
-    "config": "^3.3.4",
-    "discord.js": "^12.5.1",
+    "cheerio": "^1.0.0-rc.6",
+    "config": "^3.3.6",
+    "discord.js": "^12.5.3",
     "giphy-api": "^2.0.1",
     "luxon": "^1.26.0",
     "node-html-parser": "^1.4.9",
     "puppeteer": "^7.1.0",
     "rss-parser": "^3.12.0",
-    "typescript": "^4.2.2",
-    "ws": "^7.4.3",
+    "typescript": "^4.2.4",
+    "ws": "^7.4.4",
     "xml2js": "^0.4.23",
     "ytdl-core": "^4.5.0",
-    "ytpl": "^2.0.5"
+    "ytpl": "^2.1.1"
   },
   "devDependencies": {
-    "@types/cheerio": "^0.22.24",
+    "@types/cheerio": "^0.22.28",
     "@types/config": "0.0.36",
-    "@types/luxon": "^1.26.1",
-    "@types/node": "^13.13.45",
+    "@types/luxon": "^1.26.3",
+    "@types/node": "^13.13.48",
     "@types/puppeteer": "^5.4.3",
-    "@types/ws": "^7.4.0"
+    "@types/ws": "^7.4.1"
   }
 }
