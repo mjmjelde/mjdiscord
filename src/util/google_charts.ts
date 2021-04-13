@@ -1,4 +1,8 @@
-import { renderGoogleChart } from './google-charts/render';
+import { init as initremote, renderGoogleChart } from './google-charts/render';
+
+export async function init() {
+    await initremote();
+}
 
 export async function getCandlestickChart(data: any): Promise<Buffer> {
     const t = `function drawChart() {

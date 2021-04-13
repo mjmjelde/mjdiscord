@@ -20,7 +20,7 @@ RUN apt-get install -y ffmpeg wget gnupg ca-certificates \
      && chmod +x /usr/sbin/wait-for-it.sh
 
 
-RUN npm install -g typescript@3.9.7
+RUN npm install -g typescript
 RUN npm install
 
 COPY . .

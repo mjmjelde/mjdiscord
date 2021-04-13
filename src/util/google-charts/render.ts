@@ -6,6 +6,23 @@ const RENDER_TIMEOUT_MS = 5000;
 
 declare var window: any;
 
+let browser: puppeteer.Browser = undefined;
+
+export async function init() {
+  if(browser == undefined) {
+    browser = await puppeteer.launch({
+        args: [
+          // Required for Docker version of Puppeteer
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          // This will write shared memory files into /tmp instead of /dev/shm,
+          // because Docker’s default for /dev/shm is 64MB
+          '--disable-dev-shm-usage'
+        ]
+    });
+  }
+}
+
 export async function renderGoogleChart(contentRaw: string, optsRaw) {
   let content = contentRaw;
 
@@ -18,17 +35,6 @@ export async function renderGoogleChart(contentRaw: string, optsRaw) {
     },
     optsRaw || {},
   );
-
-  const browser = await puppeteer.launch({
-      args: [
-        // Required for Docker version of Puppeteer
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        // This will write shared memory files into /tmp instead of /dev/shm,
-        // because Docker’s default for /dev/shm is 64MB
-        '--disable-dev-shm-usage'
-      ]
-  });
 
   const page = await browser.newPage();
   page.setDefaultTimeout(RENDER_TIMEOUT_MS);
@@ -57,7 +63,7 @@ export async function renderGoogleChart(contentRaw: string, optsRaw) {
     buf = await elt.screenshot();
   }
 
-  await browser.close();
+  await page.close();
 
   return buf;
 }

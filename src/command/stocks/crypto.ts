@@ -3,7 +3,7 @@ import FinnhubClient, { Finnhub } from "../../lib/stocks/finnhub";
 import { AbstractCommand } from "../abstract_command";
 import * as config from 'config';
 import { FinnhubCryptoSymbol, FinnhubSymbol } from "../../lib/stocks/types/finnhub_symbol";
-import { getCandlestickChart } from "../../util/google_charts";
+import { init, getCandlestickChart } from "../../util/google_charts";
 import { formatAMPM, get24HoursAgoTimestamp } from "../../util/time";
 import { CommandArgs } from "../../util/command_args";
 
@@ -18,7 +18,7 @@ export class CryptoCommand implements AbstractCommand {
     this.client = FinnhubClient;
     this.updateSymbols();
     setInterval(() => this.updateSymbols(), 24 * 60 * 60 * 1000);
-    
+    init();
   }
 
   async updateSymbols() {
