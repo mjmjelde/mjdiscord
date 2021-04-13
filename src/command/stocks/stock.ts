@@ -45,6 +45,7 @@ export class StockCommand implements AbstractCommand {
         // {name: '\u200B', value: '\u200B' },
         {name: 'Low', value: `$${quote.l.toString()}`, inline: true},
         {name: 'High', value: `$${quote.h.toString()}`, inline: true},
+        {name: 'Trading View', value: `https://www.tradingview.com/symbols/${symbol.symbol}/`}
         
       );
       embed.setImage(`https://elite.finviz.com/chart.ashx?t=${symbol.symbol}&ty=c&ta=st_c,sch_200p&p=i5&s=1&x=${Math.random().toString(36).substr(2,9)}`)
