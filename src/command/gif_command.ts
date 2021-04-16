@@ -56,7 +56,7 @@ export class GifCommand implements AbstractCommand {
             params: {
                 key: config.get("tenor.apikey")
             },
-            baseURL: "https://api.tenor.com/v1"
+            baseURL: "https://g.tenor.com/v1"
         });
     }
 
@@ -81,6 +81,7 @@ export class GifCommand implements AbstractCommand {
             msg.reply("You must include a search keyword for your gif");
         } else {
             const keyword = args.restToString();
+            console.log(`Searching tenor for ${keyword}`);
             this.axios.get('/search', {
                 params: {
                     q: keyword
