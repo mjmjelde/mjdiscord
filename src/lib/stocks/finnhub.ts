@@ -14,6 +14,31 @@ export interface FinnhubStockWebsocketMessage {
   symbol: string;
 }
 
+export interface FinnhubSocketTrade {
+  type: string;
+  data: {
+    s: string;
+    p: number;
+    t: number;
+    v: number;
+    c: any;
+  }[]
+}
+
+export interface FinnhubSocketEvents {
+  'message': (data: FinnhubSocketTrade) => void;
+}
+
+export declare interface FinnhubSocket {
+  on<U extends keyof FinnhubSocketEvents>(
+    event: U, listener: FinnhubSocketEvents[U]
+  ): this;
+
+  emit<U extends keyof FinnhubSocketEvents>(
+    event: U, ...args: Parameters<FinnhubSocketEvents[U]>
+  ): boolean;
+}
+
 export class FinnhubSocket extends EventEmitter {
   private socket: WebSocket;
   private debug: boolean;
@@ -39,7 +64,7 @@ export class FinnhubSocket extends EventEmitter {
     if(this.debug) {
       console.log(`Message Received: ${event.data}`);
     }
-    this.emit('message', event);
+    this.emit('message', JSON.parse(event.data.toString()) as FinnhubSocketTrade);
   }
 
   public subscribe(symbol: string) {

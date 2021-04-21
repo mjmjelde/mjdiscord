@@ -41,7 +41,7 @@ export class CryptoCommand implements AbstractCommand {
     if (!args.atEnd()) {
       switch(args.pop()) {
         case 'alert':
-
+          
           break;
         default:
           msg.reply('Invalid subcommand.  Please try again');

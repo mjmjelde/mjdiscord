@@ -10,9 +10,13 @@ async function test() {
 
   Finnhub.socket.subscribe('BINANCE:ALGOUSDT');
   Finnhub.socket.subscribe('BINANCE:BTCUSDT');
-  Finnhub.socket.subscribe('AAPL');
+  // Finnhub.socket.subscribe('AAPL');
   Finnhub.socket.on('message', (data) => {
-    console.log(data);
+    // console.log(data);
+    if(data.type == "trade") {
+      let lastTrade = data.data.reduce((l, r) => l.t > r.t ? l : r);
+      console.log(`Last trade price of ${lastTrade.s} = ${lastTrade.p}`);
+    }
   })
 }
 
