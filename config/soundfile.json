@@ -34,5 +34,21 @@
   {
     "name": "cracked",
     "help": "cracked : This guy is cracked"
+  },
+  {
+    "name": "vegetables",
+    "help": "vegetables : We LOVE to eat vegetables"
+  },
+  {
+    "name": "wife",
+    "help": "wife : I love my wife"
+  },
+  {
+    "name": "wtfwt",
+    "help": "wtfwt : What the fuck was that?"
+  },
+  {
+    "name": "yeetyeet",
+    "help": "yeetyeet : YEET YEET!"
   }
 ]
