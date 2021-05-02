@@ -57,7 +57,7 @@ export class FileSoundsCommands implements AbstractCommand {
       sendToText: false,
       song: {
         id: '0',
-        site: 'file',
+        site: 'fileopus',
         url: sound.name,
       }
     });
