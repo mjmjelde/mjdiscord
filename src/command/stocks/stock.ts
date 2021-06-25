@@ -1,15 +1,17 @@
 import { Message, MessageEmbed, PartialMessage } from "discord.js";
 import FinnhubClient, { Finnhub } from "../../lib/stocks/finnhub";
-import { AbstractCommand } from "../abstract_command";
 import * as config from 'config';
 import { FinnhubSymbol } from "../../lib/stocks/types/finnhub_symbol";
+import { DiscordCommand } from "../discord_command";
+import { CommandArgs } from "../../util/command_args";
 
-export class StockCommand implements AbstractCommand {
+export class StockCommand extends DiscordCommand {
 
   private client: Finnhub;
   private stock_symbols: FinnhubSymbol[];
 
   constructor() {
+    super();
     // this.client = new Finnhub(config.get('finnhub.apikey'));
     this.client = FinnhubClient;
     this.updateSymbols();
@@ -20,11 +22,11 @@ export class StockCommand implements AbstractCommand {
     this.stock_symbols = await this.client.symbols();
   }
 
-  should_execute(msg: Message | PartialMessage): boolean {
+  public shouldExecute(msg: Message | PartialMessage, args: CommandArgs): boolean {
     return msg.content.startsWith('$');
   }
 
-  async execute(msg: Message | PartialMessage) {
+  async execute(msg: Message | PartialMessage, args: CommandArgs) {
     const stock = msg.content.replace(/\$/, '').trim().toUpperCase();
     const symbol = this.stock_symbols.find(c => c.symbol == stock);
     if (!symbol) {

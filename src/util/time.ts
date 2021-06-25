@@ -46,3 +46,7 @@ export function formatAMPM(date: Date): string {
   var strTime = `${hours}:${minutes} ${ampm}`;
   return strTime;
 }
+
+export function sleep(ms): Promise<any> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

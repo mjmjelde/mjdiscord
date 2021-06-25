@@ -1,6 +1,6 @@
 import { Guild, VoiceConnection } from "discord.js";
 import { TextChannel, VoiceChannel, DMChannel, NewsChannel } from "discord.js";
-import { getSongStream } from "../util/song";
+import { getSongStream } from "./song";
 import * as ytdl from "ytdl-core";
 
 export interface MusicItem {

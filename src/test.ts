@@ -1,23 +1,37 @@
-import Finnhub from './lib/stocks/finnhub';
+import browser from "./services/browser";
+import { InventoryAlerts } from "./services/inventoryalert";
+import log from "./util/logger";
+import { sleep } from "./util/time";
 
 async function test() {
-  const symbols = await Finnhub.crypto.symbols('binance');
-  const symbol = symbols.find(c => c.symbol == 'BINANCE:ALGOUSDT');
-  
-  Finnhub.crypto.candles(symbol).then((data) => {
-    // console.log(data);
-  });
+  const b = browser;
+  const page = await b.getPage();
+  // await sleep(20000);
+  await page.goto("https://www.newegg.com/p/pl?N=100007709%208000", {timeout: 0});
+  const items = await page.$$eval('.item-cell', (items) => {
+    let ret = [];
+    items.forEach(item => {
 
-  Finnhub.socket.subscribe('BINANCE:ALGOUSDT');
-  Finnhub.socket.subscribe('BINANCE:BTCUSDT');
-  // Finnhub.socket.subscribe('AAPL');
-  Finnhub.socket.on('message', (data) => {
-    // console.log(data);
-    if(data.type == "trade") {
-      let lastTrade = data.data.reduce((l, r) => l.t > r.t ? l : r);
-      console.log(`Last trade price of ${lastTrade.s} = ${lastTrade.p}`);
-    }
-  })
+      if ((item.querySelector('.item-promo') == null) || (item.querySelector(".item-promo") as HTMLParagraphElement).innerText.toLowerCase().trim() != "out of stock") {
+        ret.push({
+          name: (item.querySelector('.item-title') as HTMLAnchorElement).innerHTML,
+          url: (item.querySelector('.item-title') as HTMLAnchorElement).href,
+          picture: (item.querySelector('.item-img > img') as HTMLImageElement).src
+        })
+      }
+    });
+    return ret;
+  });
+  console.log(items);
 }
 
-test();
+const ia = new InventoryAlerts()
+ia.monitorPage("https://www.newegg.com/p/pl?N=100007709%208000");
+ia.on('item', item => {
+  log.info(`Item in stock: ${item.name}`);
+});
+ia.forceRun();
+
+process.on('exit', () => {
+  browser.close();
+})

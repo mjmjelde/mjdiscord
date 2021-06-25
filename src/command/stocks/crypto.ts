@@ -1,52 +1,40 @@
 import { Message, MessageEmbed, PartialMessage } from "discord.js";
 import FinnhubClient, { Finnhub } from "../../lib/stocks/finnhub";
-import { AbstractCommand } from "../abstract_command";
-import * as config from 'config';
-import { FinnhubCryptoSymbol, FinnhubSymbol } from "../../lib/stocks/types/finnhub_symbol";
-import { init, getCandlestickChart } from "../../util/google_charts";
-import { formatAMPM, get24HoursAgoTimestamp } from "../../util/time";
+import { FinnhubCryptoSymbol } from "../../lib/stocks/types/finnhub_symbol";
+import { BinanceUS } from "../../services/binanceus";
+import GoogleChart from "../../services/chart";
+import { BinanceSymbols } from "../../services/types/binance/binance_exchange_info";
 import { CommandArgs } from "../../util/command_args";
+import { formatAMPM, get24HoursAgoTimestamp } from "../../util/time";
+import { DiscordCommand } from "../discord_command";
 
-export class CryptoCommand implements AbstractCommand {
-
+export class CryptoCommand extends DiscordCommand {
+  
   private client: Finnhub;
   private stock_symbols: FinnhubCryptoSymbol[];
 
-
   constructor() {
-    // this.client = new Finnhub(config.get('finnhub.apikey'));
+    super();
     this.client = FinnhubClient;
     this.updateSymbols();
     setInterval(() => this.updateSymbols(), 24 * 60 * 60 * 1000);
-    init();
+    this.updateSymbols();
   }
 
   async updateSymbols() {
     this.stock_symbols = await this.client.crypto.symbols("binance");
   }
 
-  should_execute(msg: Message | PartialMessage): boolean {
-    return msg.content.startsWith('#');
+  shouldExecute(msg: Message | PartialMessage, args: CommandArgs): boolean {
+    return args.peek().startsWith("#");
   }
 
-  async execute(msg: Message | PartialMessage) {
-    const args = new CommandArgs(msg.client, msg.content);
-    // args.pop();
-    const stock = args.pop().replace(/\#/, '').trim().toUpperCase();
-    const symbol = this.stock_symbols.find(c => (c.displaySymbol == stock || `${stock}/USDT` == c.displaySymbol));
+  async execute(msg: Message | PartialMessage, args: CommandArgs) {
+    const symbolRaw = args.pop().replace(/\#/, '').trim().toUpperCase();
+    const symbol = this.stock_symbols.find(c => (c.displaySymbol == symbolRaw || `${symbolRaw}/USDT` == c.displaySymbol));
     if (!symbol) {
-      msg.reply('Invalid stock symbol.');
+      msg.reply(`Invalid crypto symbol provided: ${symbolRaw}`);
       return;
-    }
-    if (!args.atEnd()) {
-      switch(args.pop()) {
-        case 'alert':
-          
-          break;
-        default:
-          msg.reply('Invalid subcommand.  Please try again');
-          return;
-      }
     }
     const candles = await this.client.crypto.candles(symbol, get24HoursAgoTimestamp(), new Date().getTime(), 15);
     //Generate Candlestick Graph
@@ -60,7 +48,7 @@ export class CryptoCommand implements AbstractCommand {
         candles.h[i]
       ]
     }
-    const candleImage = await getCandlestickChart(data);
+    const candleImage = await GoogleChart.renderChart(data.toString());
     const embed = new MessageEmbed();
     embed.setTitle(symbol.displaySymbol);
     embed.attachFiles([{

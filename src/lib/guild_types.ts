@@ -1,6 +1,5 @@
-import { Guild, Structures, VoiceConnection } from "discord.js";
-import { MusicData, MusicItem, MusicGuild } from "./music_types";
-import { getSongStream } from "../util/song";
+import { Guild, Structures } from "discord.js";
+import { MusicGuild } from "./music_types";
 
 export interface MjGuildInterface extends Guild {
   music: MusicGuild;

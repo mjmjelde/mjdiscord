@@ -1,4 +1,7 @@
 config/default.json
 
+data/
+
 node_modules
 dist
+old
