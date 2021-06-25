@@ -33,6 +33,7 @@ import { MiddleFingerCommand } from "./command/middlefinger";
 import { StockCommand } from "./command/stocks/stock";
 import { VoteCommand } from "./command/vote";
 import { CryptoCommand } from "./command/stocks/crypto";
+import { RemindCommand } from "./command/remind";
 
 const client = new Client();
 client.login(config.get("client_key"));
@@ -73,6 +74,7 @@ commands.push(new TableFlipCommand());
 commands.push(new RandomClassCommand());
 commands.push(new RandomComicCommand());
 commands.push(new BeerCommand());
+commands.push(new RemindCommand());
 commands.push(new HelpCommand(commands)); // Do this one last because of passing commands to it!
 
 const randomStatus = [

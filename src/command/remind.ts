@@ -4,9 +4,13 @@ import { getCommand, commandCharacter } from "../util/command";
 
 export class RemindCommand implements AbstractCommand {
   should_execute(msg: Message | PartialMessage): boolean {
-    return getCommand(msg).toLocaleLowerCase() == "remind";
+    return getCommand(msg).toLowerCase() == "remind";
   }
   execute(msg: Message | PartialMessage): void {
+    if (msg.author.id == "134485404576514048") {
+      msg.reply("Sure thing! I will remind you later.");
+      return;
+    }
     msg.reply("Do I look like your slave?  Remind yourself");
     return;
   }
