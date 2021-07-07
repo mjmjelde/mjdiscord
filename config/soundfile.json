@@ -58,5 +58,9 @@
   {
     "name": "depressed",
     "help": "depressed : I am actually quite depressed!"
+  },
+  {
+    "name": "noway",
+    "help": "noway : NO WAY!"
   }
 ]
