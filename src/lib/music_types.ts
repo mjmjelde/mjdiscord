@@ -1,11 +1,12 @@
-import { Guild, VoiceConnection } from "discord.js";
-import { TextChannel, VoiceChannel, DMChannel, NewsChannel } from "discord.js";
+import { Client, StageChannel, TextBasedChannels } from "discord.js";
+import { VoiceChannel } from "discord.js";
 import { getSongStream } from "./song";
 import * as ytdl from "ytdl-core";
+import { createAudioPlayer, getVoiceConnection, VoiceConnection } from "@discordjs/voice";
 
 export interface MusicItem {
-  textChannel: TextChannel | DMChannel | NewsChannel;
-  voiceChannel: VoiceChannel;
+  textChannel: TextBasedChannels;
+  voiceChannel: VoiceChannel | StageChannel;
   sendToText: boolean;
   song: Song;
 }
@@ -20,28 +21,28 @@ export interface MusicData {
   queue: MusicItem[];
   isPlaying: boolean;
   nowPlaying: MusicItem;
-  voiceConnection: VoiceConnection;
   volume: number;
 }
 
 export class MusicGuild {
+  private client: Client;
+  private guildId: string;
   private queue: MusicItem[];
   private nowPlaying: MusicItem;
-  private voiceConnection: VoiceConnection;
   private _volume: number;
 
-  constructor() {
+  private audioPlayer = createAudioPlayer();
+
+  constructor(client: Client, guildId: string) {
+    this.client = client;
+    this.guildId = guildId;
     this.queue = [];
     this.nowPlaying = undefined;
-    this.voiceConnection = undefined;
     this._volume = 0.75;
   }
 
   get isPlaying(): boolean {
-    if (!this.voiceConnection) {
-      return false;
-    }
-    return this.voiceConnection.dispatcher && !this.voiceConnection.dispatcher.paused;
+    return this.nowPlaying != undefined;
   }
 
   get volume(): number {

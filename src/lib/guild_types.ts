@@ -1,17 +1,19 @@
-import { Guild, Structures } from "discord.js";
 import { MusicGuild } from "./music_types";
 
-export interface MjGuildInterface extends Guild {
-  music: MusicGuild;
+export class MjGuild {
+  public music: MusicGuild = new MusicGuild();
 }
 
-Structures.extend("Guild", Guild => {
-  class MjGuild extends Guild implements MjGuildInterface {
-    public music: MusicGuild = new MusicGuild();
+export class MjGuildManager {
+  private guildHash = new Map<string, MjGuild>();
 
-    constructor(client, data) {
-      super(client, data);
+  public getGuild(id: string): MjGuild {
+    if (!this.guildHash.has(id)) {
+      this.guildHash.set(id, new MjGuild());
     }
+    return this.guildHash.get(id);
   }
-  return MjGuild;
-});
+}
+
+const MjGuildManagerInstance = new MjGuildManager();
+export default MjGuildManagerInstance;
