@@ -1,7 +1,7 @@
 import Axios, { AxiosInstance } from "axios";
 import { randomInt } from "crypto";
-import * as EventEmitter from "events";
-import * as WebSocket from "ws";
+import EventEmitter from "events";
+import WebSocket from "ws";
 import log from "../util/logger";
 import { BinanceUSEvents } from "./types/binance/binanceusevents";
 import { BinanceUSExchangeInfo } from "./types/binance/binance_exchange_info";

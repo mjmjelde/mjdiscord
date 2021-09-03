@@ -1,16 +1,15 @@
-import { Song } from "./music_types";
+import { TrackData } from "../services/music/music_types";
 
 import { Readable } from "stream";
 import { createReadStream } from "fs";
-import { download } from "./youtube";
-import { StreamType } from "discord.js";
+import { download } from "../services/music/youtube";
 
 export interface SoundStream {
-  type: StreamType;
+  type: any;
   stream: Readable
 }
 
-export async function getSongStream(song: Song): Promise<SoundStream> {
+export async function getSongStream(song: TrackData): Promise<SoundStream> {
   switch (song.site) {
     case 'youtube':
       // return ytdl(song.url, {quality: 'highestaudio', filter: 'audioonly'});

@@ -1,6 +1,6 @@
-import * as ytdl from 'ytdl-core';
-import * as prism from 'prism-media';
-import { Readable } from 'stream';
+const ytdl = require('ytdl-core');
+const prism = require('prism-media');
+const { pipeline } = require('stream');
 
 function filter(format) {
 	return format.codecs === 'opus' &&
@@ -23,18 +23,23 @@ function nextBestFormat(formats, isLive) {
 	return formats.find(format => !format.bitrate) || formats[0];
 }
 
-export async function download(url, options = {}): Promise<Readable> {
-  const info = await ytdl.getInfo(url);
+const noop = () => {};
+
+export async function download(url, options = {}) {
+	const info = await ytdl.getInfo(url);
 	// Prefer opus
 	const format = info.formats.find(filter);
-	const canDemux = format && parseInt(info.videoDetails.lengthSeconds) != 0;
+	const canDemux = format && info.videoDetails.lengthSeconds != 0;
 	if (canDemux) options = { ...options, filter };
-	else if (parseInt(info.videoDetails.lengthSeconds) != 0) options = { ...options, filter: 'audioonly' };
+	else if (info.videoDetails.lengthSeconds != 0) options = { ...options, filter: 'audioonly' };
 	if (canDemux) {
 		const demuxer = new prism.opus.WebmDemuxer();
-		return ytdl.downloadFromInfo(info, options).pipe(demuxer).on('end', () => demuxer.destroy());
+		return pipeline([
+			ytdl.downloadFromInfo(info, options),
+			demuxer,
+		], noop);
 	} else {
-		const bestFormat = nextBestFormat(info.formats, info.player_response.videoDetails.isLiveContent);
+		const bestFormat = nextBestFormat(info.formats, info.videoDetails.isLiveContent);
 		if (!bestFormat) throw new Error('No suitable format found');
 		const transcoder = new prism.FFmpeg({
 			args: [
@@ -48,13 +53,9 @@ export async function download(url, options = {}): Promise<Readable> {
 				'-ar', '48000',
 				'-ac', '2',
 			],
+			shell: false,
 		});
 		const opus = new prism.opus.Encoder({ rate: 48000, channels: 2, frameSize: 960 });
-		const stream = transcoder.pipe(opus);
-		stream.on('close', () => {
-			transcoder.destroy();
-			opus.destroy();
-		});
-		return stream;
+		return pipeline([transcoder, opus], noop);
 	}
 }

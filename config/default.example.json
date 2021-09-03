@@ -1,6 +1,8 @@
 {
   "command_character": ".",
+  "client_id": "CHANGE_ME",
   "client_key": "CHANGE_ME",
+  "loglevel": "info",
   "yt": {
       "base_volume": 0.1
   },

@@ -1,0 +1,85 @@
+import { get } from "config";
+import { Client, Guild, Intents, Interaction } from "discord.js";
+import { REST } from '@discordjs/rest';
+import { Logger } from "tslog";
+import { AbstractCommand } from "./commands/abstract_command";
+import { getCommands } from "./commands/commands";
+import { Routes } from "discord-api-types/v9";
+import log from "./util/logger";
+
+export class MjBot {
+  private client: Client;
+  private logger: Logger;
+  private commands: AbstractCommand[];
+  private rest: REST;
+
+  constructor() {
+    this.client = new Client({ intents: [
+      Intents.FLAGS.GUILDS, 
+      Intents.FLAGS.GUILD_MESSAGES,
+      Intents.FLAGS.GUILD_BANS,
+      Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+      Intents.FLAGS.GUILD_VOICE_STATES,
+      Intents.FLAGS.GUILD_INTEGRATIONS,
+      Intents.FLAGS.DIRECT_MESSAGES, 
+      
+    ]});
+    this.logger = log;
+    this.commands = getCommands(this);
+    this.rest = new REST({ version: '9' }).setToken(get("client_key"));
+
+    this.client.once('ready', this.ready.bind(this));
+    this.client.on('guildCreate', this.guildJoin.bind(this));
+    this.client.on('interactionCreate', this.interactionCreate.bind(this));
+    this.client.login(get("client_key"));
+  }
+
+  private async ready() {
+    this.logger.info('Client connected!');
+
+    const globalCommands = [];
+    this.commands.forEach(command => {
+      globalCommands.push(...command.globalCommands().map(x => x.toJSON()));
+    });
+    this.logger.info(`Registering ${globalCommands.length} global commands!`);
+    await this.rest.put(
+      Routes.applicationCommands(get("client_id")),
+      { body: globalCommands }
+    );
+
+    for(let guildData of await this.client.guilds.fetch()) {
+      this.guildJoin(await guildData[1].fetch())
+    }
+  }
+
+  private async guildJoin(guild: Guild) {
+    const guildCommands = [];
+    this.commands.forEach(command => {
+      guildCommands.push(...command.guildCommands().map(x => x.toJSON()));
+    });
+    
+    this.logger.info(`Registering ${guildCommands.length} commands in ${guild.name}`);
+    await this.rest.put(
+      Routes.applicationGuildCommands(get("client_id"), guild.id),
+      { body: guildCommands }
+    );
+  }
+
+  private async interactionCreate(interaction: Interaction) {
+    if (!interaction.isCommand()) {
+      return;
+    }
+    for(let command of this.commands) {
+      try {
+        if (command.shouldExecute(interaction)) {
+          await command.execute(interaction);
+          break;
+        }
+      } catch(e) {
+        this.logger.error(`Command ${command.name} failed`, e);
+      }
+    }
+  }
+}
+
+new MjBot();
