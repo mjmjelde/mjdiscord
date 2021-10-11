@@ -20,9 +20,8 @@
     "@types/underscore": "^1.11.3"
   },
   "dependencies": {
-    "@cliqz/adblocker-puppeteer": "^1.22.5",
     "@discordjs/builders": "^0.6.0",
-    "@discordjs/opus": "^0.5.3",
+    "@discordjs/opus": "^0.6.0",
     "@discordjs/rest": "^0.1.0-canary.0",
     "@discordjs/voice": "^0.6.0",
     "axios": "^0.21.4",
@@ -39,8 +38,6 @@
     "lru-cache": "^6.0.0",
     "luxon": "^2.0.2",
     "node-html-parser": "^4.1.4",
-    "prism-media": "file:../prism-media",
-    "puppeteer": "^10.2.0",
     "rss-parser": "^3.12.0",
     "sharp": "^0.29.1",
     "tslog": "^3.2.1",

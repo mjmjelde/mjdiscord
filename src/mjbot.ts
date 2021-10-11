@@ -6,7 +6,6 @@ import { AbstractCommand } from "./commands/abstract_command";
 import { getCommands } from "./commands/commands";
 import { Routes } from "discord-api-types/v9";
 import log from "./util/logger";
-import ChromeBrowser from "./services/browser";
 
 export class MjBot {
   public client: Client;
@@ -40,7 +39,6 @@ export class MjBot {
       if (text.toString('utf-8').trim() == 'stop') {
         console.log('Thanks for using MjBot!');
         this.client.destroy();
-        ChromeBrowser.close();
         process.exit();
       }
     })

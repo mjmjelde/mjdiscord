@@ -80,7 +80,6 @@ export class NFLNewsCommand extends AbstractCommand {
       if (remove) {
         this.channels.delete(interaction.channelId);
         await interaction.reply({content: 'This channel has been removed from the NFL News notifications'});
-        return;
       } else {
         const nflChannel = this.channels.get(interaction.channelId);
         if (type == FantasyPros.NewsType.ALL) {

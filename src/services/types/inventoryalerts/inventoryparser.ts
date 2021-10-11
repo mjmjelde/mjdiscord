@@ -1,4 +1,3 @@
-import { Page } from "puppeteer";
 import { InventoryItem } from "./inventoryitem";
 
 export abstract class InventoryParser {
