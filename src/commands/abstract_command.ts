@@ -10,5 +10,5 @@ export abstract class AbstractCommand {
 
   abstract shouldExecute(interaction: CommandInteraction): boolean;
 
-  abstract execute(interaction: CommandInteraction): Promise<boolean>;
+  abstract execute(interaction: CommandInteraction): Promise<void>;
 }

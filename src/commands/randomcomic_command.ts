@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import axios from "axios";
-import { createCanvas, loadImage } from "canvas";
 import { CommandInteraction, MessageAttachment } from "discord.js";
 import parse from "node-html-parser";
+import sharp from "sharp";
 import log from "../util/logger";
 import { AbstractCommand } from "./abstract_command";
 
@@ -26,27 +26,32 @@ export class RandomComicCommand extends AbstractCommand {
     return interaction.commandName == 'randomcomic';
   }
 
-  async execute(interaction: CommandInteraction): Promise<boolean> {
+  async execute(interaction: CommandInteraction): Promise<void> {
     await interaction.deferReply();
     axios('http://explosm.net/rcg/view/').then(async (resp) => {
           const html = parse(resp.data);
           const imgs = html.querySelector('div.rcg-panels').querySelectorAll('img');
-          const img1 = await loadImage(imgs[0].attributes.src);
-          const img2 = await loadImage(imgs[1].attributes.src);
-          const img3 = await loadImage(imgs[2].attributes.src);
-          const newImg = createCanvas(img1.width * 3, img1.height);
-          const ctx = newImg.getContext('2d');
-          ctx.drawImage(img1, 0, 0);
-          ctx.drawImage(img2, img1.width, 0);
-          ctx.drawImage(img3, img1.width * 2, 0);
+          const img1 = sharp(await (await axios({ url: imgs[0].attributes.src, responseType: 'arraybuffer' })).data);
+          const img2 = sharp(await (await axios({ url: imgs[1].attributes.src, responseType: 'arraybuffer' })).data);
+          const img3 = sharp(await (await axios({ url: imgs[2].attributes.src, responseType: 'arraybuffer' })).data);
+          const img1Meta = await img1.metadata();
+          const newImg = sharp({create: {width: img1Meta.width * 3, height: img1Meta.height, channels: 4, background: {r: 0, g: 0, b: 0, alpha: 0}}});
+          newImg.composite([
+            { input: await img1.toBuffer(), left: 0, top: 0 },
+            { input: await img2.toBuffer(), left: img1Meta.width, top: 0 },
+            { input: await img3.toBuffer(), left: img1Meta.width * 2, top: 0 }
+          ]).withMetadata().webp( { quality: 90 });
 
-          const attachment = new MessageAttachment(newImg.toBuffer());
+          const attachment = new MessageAttachment(await newImg.toBuffer());
           await interaction.editReply({files: [attachment]});
+          newImg.destroy();
+          img1.destroy();
+          img2.destroy();
+          img3.destroy();
         }).catch(async (err) => {
           log.error(err);
           await interaction.editReply("There was an error making your random comic... try again later");
         });
-    return true;
   }
 
 }

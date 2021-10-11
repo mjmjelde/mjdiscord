@@ -1,7 +1,8 @@
-import { AudioResource, createAudioResource, StreamType } from "@discordjs/voice";
+import { AudioResource, createAudioResource, demuxProbe, StreamType } from "@discordjs/voice";
 import { Snowflake } from "discord.js";
 import { createReadStream } from "fs";
 import ytdl from "ytdl-core";
+import log from "../../util/logger";
 import { download } from "./youtube";
 
 export interface TrackData {
@@ -36,9 +37,11 @@ export class Track implements TrackData {
   public async createAudioResource(): Promise<AudioResource<Track>> {
     switch(this.site) {
       case 'youtube': 
-        const stream = await download(this.url);
-        // const stream = ytdl(this.url, { filter: 'audioonly', dlChunkSize: 0 });
-        return createAudioResource(stream, {inputType: StreamType.Opus, metadata: this});
+        // const stream = await download(this.url);
+        const file = ytdl(this.url, { filter: 'audioonly', highWaterMark: 1<<25 });
+        const probe = await demuxProbe(file);
+        log.debug(probe.type);
+        return createAudioResource(probe.stream, {inputType: probe.type, metadata: this});
       case 'fileopus':
         return createAudioResource(await createReadStream(`./audio/${this.url}.opus`), {inputType: StreamType.OggOpus, metadata: this});
     }

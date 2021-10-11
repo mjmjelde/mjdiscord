@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { Collection, CollectorFilter, CollectorOptions, CommandInteraction, Guild, GuildChannel, GuildMember, InteractionReplyOptions, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed, Snowflake, ThreadChannel } from "discord.js";
+import { ButtonInteraction, Collection, CollectorFilter, CollectorOptions, CommandInteraction, Guild, GuildChannel, GuildMember, InteractionReplyOptions, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed, Snowflake, ThreadChannel } from "discord.js";
 import log from "../util/logger";
 import { randomIntFromInterval } from "../util/numbers";
 import { delay } from "../util/time";
@@ -27,7 +27,7 @@ export class TeamCommand extends AbstractCommand {
     return interaction.commandName == "team";
   }
   
-  async execute(interaction: CommandInteraction): Promise<boolean> {
+  async execute(interaction: CommandInteraction): Promise<void> {
     if (!interaction.member) {
       await interaction.reply('Please use this command in a guild channel');
       return;
@@ -70,7 +70,8 @@ export class TeamCommand extends AbstractCommand {
       }
       const collector = interaction.channel.createMessageComponentCollector({filter: buttonFilter, time: 5 * 60 * 1000, max: 1});
       collector.on('collect', async i => {
-        if (i.customId.startsWith("accept")) {
+        let bi = i as ButtonInteraction;
+        if (bi.customId.startsWith("accept")) {
           for (let i = 0; i < teams.length; i++) {
             const chan = guildChannels[i];
             for (const gm of teams[i]) {
@@ -89,7 +90,6 @@ export class TeamCommand extends AbstractCommand {
     }
     
     await interaction.reply(reply);
-    return true;
   }
 
   private shuffle(members: Collection<Snowflake, GuildMember>): GuildMember[] {

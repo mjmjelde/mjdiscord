@@ -74,7 +74,7 @@ export class GifCommand extends AbstractCommand {
   shouldExecute(interaction: CommandInteraction): boolean {
     return interaction.commandName == "gif";
   }
-  async execute(interaction: CommandInteraction): Promise<boolean> {
+  async execute(interaction: CommandInteraction): Promise<void> {
     await interaction.deferReply();
     const searchString = interaction.options.getString("search");
     log.debug(`Gif search term: ${searchString}`);
@@ -93,7 +93,6 @@ export class GifCommand extends AbstractCommand {
         await interaction.editReply(`No gifs found for: ${searchString}`);
       }
     });
-    return true;
   }
   
 

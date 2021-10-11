@@ -6,9 +6,10 @@ import { AbstractCommand } from "./commands/abstract_command";
 import { getCommands } from "./commands/commands";
 import { Routes } from "discord-api-types/v9";
 import log from "./util/logger";
+import ChromeBrowser from "./services/browser";
 
 export class MjBot {
-  private client: Client;
+  public client: Client;
   private logger: Logger;
   private commands: AbstractCommand[];
   private rest: REST;
@@ -17,12 +18,12 @@ export class MjBot {
     this.client = new Client({ intents: [
       Intents.FLAGS.GUILDS, 
       Intents.FLAGS.GUILD_MESSAGES,
+      Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
       Intents.FLAGS.GUILD_BANS,
       Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
       Intents.FLAGS.GUILD_VOICE_STATES,
       Intents.FLAGS.GUILD_INTEGRATIONS,
       Intents.FLAGS.DIRECT_MESSAGES, 
-      
     ]});
     this.logger = log;
     this.commands = getCommands(this);
@@ -32,6 +33,17 @@ export class MjBot {
     this.client.on('guildCreate', this.guildJoin.bind(this));
     this.client.on('interactionCreate', this.interactionCreate.bind(this));
     this.client.login(get("client_key"));
+
+    process.stdin.resume();
+    process.stdin.setEncoding('utf-8');
+    process.stdin.on('data', text => {
+      if (text.toString('utf-8').trim() == 'stop') {
+        console.log('Thanks for using MjBot!');
+        this.client.destroy();
+        ChromeBrowser.close();
+        process.exit();
+      }
+    })
   }
 
   private async ready() {

@@ -24,7 +24,7 @@ export class DadCommand extends AbstractCommand {
     return interaction.commandName == 'dad';
   }
 
-  async execute(interaction: CommandInteraction): Promise<boolean> {
+  async execute(interaction: CommandInteraction): Promise<void> {
     axios("https://icanhazdadjoke.com/", {
       headers: {
         "Accept": "application/json",
@@ -36,7 +36,6 @@ export class DadCommand extends AbstractCommand {
       log.error(err);
       await interaction.reply({content: 'Error getting dad joke.  Try again later'});
     });
-    return true;
   }
 
 }

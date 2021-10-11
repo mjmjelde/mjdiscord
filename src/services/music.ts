@@ -1,4 +1,4 @@
-import { AudioPlayerStatus, AudioResource, createAudioPlayer, entersState, getVoiceConnection, joinVoiceChannel, VoiceConnection, VoiceConnectionDisconnectReason, VoiceConnectionStatus } from "@discordjs/voice";
+import { AudioPlayerStatus, AudioResource, createAudioPlayer, DiscordGatewayAdapterCreator, entersState, getVoiceConnection, joinVoiceChannel, VoiceConnection, VoiceConnectionDisconnectReason, VoiceConnectionStatus } from "@discordjs/voice";
 import { Track } from "./music/music_types";
 import { AudioPlayer } from "@discordjs/voice";
 import { Guild, Snowflake } from "discord.js";
@@ -52,8 +52,8 @@ export class MusicGuild {
     voiceConnection.on('error', (err) => {
       log.error(err)
     });
-    voiceConnection.on('stateChange', async (_, newState) => {
-      log.debug('voiceConnection state change', newState.status);
+    voiceConnection.on('stateChange', async (oldState, newState) => {
+      log.debug('voiceConnection state change', oldState.status, newState.status);
       if (newState.status == VoiceConnectionStatus.Disconnected) {
         if (newState.reason == VoiceConnectionDisconnectReason.WebSocketClose && newState.closeCode == 4014) {
           try {
@@ -91,6 +91,7 @@ export class MusicGuild {
       const vc = joinVoiceChannel({
         guildId: this.guild.id,
         channelId: channelId,
+        // @ts-ignore
         adapterCreator: this.guild.voiceAdapterCreator,
       });
       this.setVoiceConnectionListeners(vc);
@@ -100,7 +101,8 @@ export class MusicGuild {
       const vc = joinVoiceChannel({
         guildId: this.guild.id,
         channelId: channelId,
-        adapterCreator: this.guild.voiceAdapterCreator,
+        // @ts-ignore
+        adapterCreator: this.guild.voiceAdapterCreator as DiscordGatewayAdapterCreator,
       });
       this.setVoiceConnectionListeners(vc);
       return vc;
@@ -109,7 +111,7 @@ export class MusicGuild {
   }
 
   private async processQueue(): Promise<void> {
-    if (this.queueLock || this.audioPlayer.state.status != AudioPlayerStatus.Idle || this.queue.length == 0) {
+    if (this.queueLock) {
       return;
     }
 
@@ -119,7 +121,10 @@ export class MusicGuild {
 
     if (this.audioPlayer.state.status == AudioPlayerStatus.Idle && this.queue.length == 0) {
       const vc = getVoiceConnection(this.guild.id);
-      vc.destroy();
+      if (vc) {
+        log.debug('Destroying voice connection');
+        vc.destroy();
+      }
       return;
     }
 

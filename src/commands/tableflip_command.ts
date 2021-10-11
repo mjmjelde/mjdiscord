@@ -31,13 +31,12 @@ export class TableFlipCommand extends AbstractCommand {
     return interaction.commandName == 'tableflip';
   }
 
-  async execute(interaction: CommandInteraction): Promise<boolean> {
+  async execute(interaction: CommandInteraction): Promise<void> {
     await interaction.reply('(\\\\°□°)\\\\  ┬─┬');
     for (const frame of frames) {
       await delay(100);
       await interaction.editReply(frame);
     }
-    return true;
   }
 
 }

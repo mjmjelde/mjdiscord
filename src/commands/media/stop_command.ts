@@ -23,11 +23,10 @@ export class StopCommand extends AbstractCommand {
     return interaction.commandName == 'stop'
   }
 
-  async execute(interaction: CommandInteraction): Promise<boolean> {
+  async execute(interaction: CommandInteraction): Promise<void> {
     const guildMusic = musicService.getService(interaction.guild);
     guildMusic.stop();
     await interaction.reply('Stopping music player...');
-    return true;
   }
 
 }

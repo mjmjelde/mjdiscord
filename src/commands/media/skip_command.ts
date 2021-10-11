@@ -23,11 +23,10 @@ export class SkipCommand extends AbstractCommand {
     return interaction.commandName == 'skip';
   }
 
-  async execute(interaction: CommandInteraction): Promise<boolean> {
+  async execute(interaction: CommandInteraction): Promise<void> {
     const guildMusic = musicService.getService(interaction.guild);
     guildMusic.skip();
     await interaction.reply('Skipping song...');
-    return true;
   }
   
 }

@@ -22,9 +22,8 @@ export class TestCommand extends AbstractCommand {
     return interaction.commandName == "testcommand";
   }
 
-  async execute(interaction: CommandInteraction): Promise<boolean> {
+  async execute(interaction: CommandInteraction): Promise<void> {
     await interaction.reply("Test command successful!");
-    return true;
   }
 
 }

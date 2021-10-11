@@ -22,9 +22,8 @@ export class MiddleFingerCommand extends AbstractCommand {
     return interaction.commandName == 'middlefinger';
   }
 
-  async execute(interaction: CommandInteraction): Promise<boolean> {
+  async execute(interaction: CommandInteraction): Promise<void> {
     await interaction.reply({content: "https://tenor.com/view/baby-girl-middle-finger-mood-screw-you-leave-me-alone-gif-10174031"})
-    return true;
   }
 
 }
