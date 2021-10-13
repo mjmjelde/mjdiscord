@@ -15,9 +15,12 @@ import { TableFlipCommand } from "./tableflip_command";
 import { TeamCommand } from "./team_command";
 import { TestCommand } from "./test_command";
 import { VoteCommand } from "./vote_command";
+import { WelcomeCommand } from "./welcome_command";
 
 export function getCommands(bot: MjBot): AbstractCommand[] {
   return [
+    new WelcomeCommand(),
+
     new StockCommand(),
     new CryptoCommand(),
 

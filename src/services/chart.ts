@@ -105,8 +105,8 @@ export class EChartService {
           type: 'candlestick',
           data: data,
           itemStyle: {
-            color:  "rgba(0,218,60, 0.3)",
-            color0: "rgba(236,0,0,0.3)",
+            color:  "rgba(0,218,60, 0.5)",
+            color0: "rgba(236,0,0,0.5)",
             borderColor:  "rgb(0,218,60)",
             borderColor0: "rgb(236,0,0)",
             borderWidth: 1
