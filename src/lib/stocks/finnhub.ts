@@ -2,6 +2,7 @@ import Axios, { AxiosInstance } from "axios";
 import config = require("config");
 import { EventEmitter } from "events";
 import WebSocket = require("ws");
+import log from "../../util/logger";
 import { getDayTimestamp } from "../../util/time";
 import ratelimiter from "../axios/axios_rate_limit";
 import { FinnhubCryptoCandle } from "./types/finnhub_candle";

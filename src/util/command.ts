@@ -1,14 +1,12 @@
-import * as config from 'config';
-import { Message, PartialMessage } from 'discord.js';
-import { CommandArgs } from './command_args';
+import { get } from "config";
 
-export function getCommand(msg: Message | PartialMessage): string {
-  if(!msg.content.startsWith(commandCharacter())) {
+export function getCommand(command: string) {
+  if (!command.startsWith(commandCharacter())) {
     return '';
   }
-  return new CommandArgs(msg.client, msg.content).pop().substring(1);
+  return command.substring(1).trim().toLowerCase();
 }
 
 export function commandCharacter(): string {
-  return config.get('command_character');
+  return get('command_character');
 }
