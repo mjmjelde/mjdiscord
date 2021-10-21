@@ -8,12 +8,14 @@ export class WelcomeCommand extends AbstractCommand {
   }
 
   guildCommands(): SlashCommandBuilder[] {
-    return [];
+    return [
+      new SlashCommandBuilder().setName('welcome').setDescription('Welcome command'),
+    ];
   }
 
   globalCommands(): SlashCommandBuilder[] {
     return [
-      new SlashCommandBuilder().setName('welcome').setDescription('Welcome command'),
+      
     ]
   }
 
