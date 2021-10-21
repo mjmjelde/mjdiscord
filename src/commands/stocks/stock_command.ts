@@ -41,7 +41,7 @@ export class StockCommand extends AbstractCommand {
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    const symbolString = interaction.options.getString('symbol');
+    const symbolString = interaction.options.getString('symbol').trim().toUpperCase();
     const symbol = this.stock_symbols.find(c => c.symbol == symbolString);
 
     if(!symbol) {
