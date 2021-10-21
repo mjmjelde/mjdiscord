@@ -22,7 +22,7 @@ export class WelcomeCommand extends AbstractCommand {
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    await interaction.reply({content: 'Welcome to MjBot 2.0!  All commands are now slash commands.  Get started by typing a slash (/) !!!'})
+    await interaction.reply({content: 'Welcome to MjBot 2.0!  All commands are now slash commands.  Get started by typing a slash (/) !!!\n\nWarning: I have no volume controls anymore, I may be loud in voice chats...'})
   }
 
 }
