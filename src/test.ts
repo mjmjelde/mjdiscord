@@ -1,7 +1,9 @@
+import { exit } from "process";
 import WebSocket from "ws";
+import { BinanceExchange } from "./services/crypto/binance_exchange";
 import { CoinbaseExchange } from "./services/crypto/coinbase_exchange";
 import { ExchangeSymbol, TradeEvent } from "./services/crypto/types/exchange_types";
-import { average } from "./util/numbers";
+import { average, percentChange } from "./util/numbers";
 
 class TimedArray<T> {
   private data: {data: T, time: number}[] = [];
@@ -44,10 +46,13 @@ class StockAverage {
   }
 
   public printAverage() {
+    const avg15 = average(this.price15.toArray());
+    const avg5 = average(this.price5.toArray());
     console.log('################');
     console.log(`Crypto: ${this.symbol.symbol}`);
-    console.log(`15 minute average: ${average(this.price15.toArray())}`)
-    console.log(`5 minute average: ${average(this.price5.toArray())}`)
+    console.log(`15 minute average: ${avg15}`)
+    console.log(`5 minute average: ${avg5}`)
+    console.log(`% change: ${percentChange(avg15, avg5)}`)
     console.log('################');
     console.log();
   }
@@ -55,6 +60,15 @@ class StockAverage {
 
 async function test() {
   const cb = new CoinbaseExchange();
+  const bn = new BinanceExchange();
+  const bnSymbols = await bn.getSymbols();
+  const usdBNSymbols = bnSymbols.filter(f => f.quoteAsset == "USD");
+  usdBNSymbols.forEach(s => {
+    console.log(`Binance Symbol: ${s.symbol}`);
+  })
+  exit(0)
+
+
   const symbols = await cb.getSymbols();
   const filtered = symbols.filter(s => s.quoteAsset == "USD");
   let sa: {[name: string]: StockAverage} = {};

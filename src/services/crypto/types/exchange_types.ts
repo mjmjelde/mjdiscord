@@ -33,3 +33,10 @@ export interface TradeEvent {
   time: number; // Timestamp of trade
 }
 
+export interface SymbolPrice {
+  open: number;
+  high: number;
+  low: number;
+  volume: number;
+  last: number;
+}

@@ -1,5 +1,5 @@
 import { EventEmitter } from "stream";
-import { ExchangeCandle, ExchangeEvents, ExchangeInterval, ExchangeSymbol } from "./types/exchange_types";
+import { ExchangeCandle, ExchangeEvents, ExchangeInterval, ExchangeSymbol, SymbolPrice } from "./types/exchange_types";
 
 export declare interface CryptoExchange {
   on<U extends keyof ExchangeEvents>(
@@ -19,6 +19,8 @@ export abstract class CryptoExchange extends EventEmitter {
   abstract getSymbols(): Promise<ExchangeSymbol[]>;
 
   abstract getCandlesticks(symbol: ExchangeSymbol, interval: ExchangeInterval): Promise<ExchangeCandle[]>;
+
+  abstract getStats(symbol: ExchangeSymbol): Promise<SymbolPrice>;
 
   abstract subscribeToTrades(symbols: ExchangeSymbol[]);
 }

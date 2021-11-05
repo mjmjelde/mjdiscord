@@ -1,5 +1,5 @@
 import { CryptoExchange } from "./abstract_exchange";
-import { ExchangeSymbol, ExchangeInterval, ExchangeCandle } from "./types/exchange_types";
+import { ExchangeSymbol, ExchangeInterval, ExchangeCandle, SymbolPrice } from "./types/exchange_types";
 import axios from 'axios';
 import WebSocket from 'ws';
 
@@ -44,6 +44,17 @@ export class CoinbaseExchange extends CryptoExchange {
       })
     });
     return resp;
+  }
+
+  async getStats(symbol: ExchangeSymbol): Promise<SymbolPrice> {
+    const apiResp = await axios.get(`https://api.exchange.coinbase.com/products/${symbol.symbol}/stats`)
+    return {
+      open: parseFloat(apiResp.data.open),
+      high: parseFloat(apiResp.data.high),
+      low: parseFloat(apiResp.data.low),
+      volume: parseFloat(apiResp.data.volume),
+      last: parseFloat(apiResp.data.last)
+    }
   }
 
   async subscribeToTrades(symbols: ExchangeSymbol[]) {
