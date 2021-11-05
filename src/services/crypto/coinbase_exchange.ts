@@ -6,7 +6,7 @@ import WebSocket from 'ws';
 export class CoinbaseExchange extends CryptoExchange {
 
   private ws: WebSocket;
-  private const wsURL = 'wss://ws-feed.exchange.coinbase.com';
+  private wsURL = 'wss://ws-feed.exchange.coinbase.com';
 
   constructor() {
     super();
@@ -46,18 +46,47 @@ export class CoinbaseExchange extends CryptoExchange {
     return resp;
   }
 
-  subscribeToTrades(symbol: ExchangeSymbol) {
-    throw new Error("Method not implemented.");
+  async subscribeToTrades(symbols: ExchangeSymbol[]) {
+    await this._checkWSConnection();
+    this.ws.send(JSON.stringify({
+      type: "subscribe",
+      product_ids: [
+        ...symbols.map(m => m.symbol)
+      ],
+      channels: [
+        "ticker"
+      ]
+    }))
   }
 
   private _checkWSConnection(): Promise<void> {
-    if (!this.ws) {
+    if (!this.ws || this.ws.readyState == WebSocket.CLOSED) {
       return new Promise<void>((resolve, reject) => {
         this.ws = new WebSocket(this.wsURL);
         this.ws.on('open', () => {
           resolve();
+          this.ws.on('message', this.onSocketReceive.bind(this))
         });
+        this.ws.on("error", () => {
+          reject();
+        })
       });
+    }
+  }
+
+  private onSocketReceive(event: WebSocket.RawData) {
+    const jsonData = JSON.parse(event.toString('utf-8'));
+    if (jsonData.type == "ticker") {
+      this.emit("trade", {
+        symbol: jsonData.product_id,
+        exchange: "coinbase",
+        volume: parseFloat(jsonData.last_size),
+        price: parseFloat(jsonData.price),
+        time: Date.parse(jsonData.time)
+      })
+    } else {
+      console.error('Invalid message receieved: ');
+      console.error(jsonData);
     }
   }
   
