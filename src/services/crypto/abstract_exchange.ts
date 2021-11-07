@@ -18,7 +18,7 @@ export abstract class CryptoExchange extends EventEmitter {
 
   abstract getSymbols(): Promise<ExchangeSymbol[]>;
 
-  abstract getCandlesticks(symbol: ExchangeSymbol, interval: ExchangeInterval): Promise<ExchangeCandle[]>;
+  abstract getCandlesticks(symbol: ExchangeSymbol, interval: ExchangeInterval, start?: number, end?: number): Promise<ExchangeCandle[]>;
 
   abstract getStats(symbol: ExchangeSymbol): Promise<SymbolPrice>;
 

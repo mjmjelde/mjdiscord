@@ -6,25 +6,18 @@ import { FinnhubCryptoSymbol } from "../../lib/stocks/types/finnhub_symbol";
 import { formatAMPM, get24HoursAgoTimestamp } from "../../util/time";
 import { echartService } from "../../services/chart";
 import sharp from "sharp";
+import cryptoManager from "../../services/crypto/crypto_manager";
+import log from "../../util/logger";
+import { CoinMarketCap } from "../../util/coinmarketcap";
 
 export class CryptoCommand extends AbstractCommand {
 
-  private client: Finnhub;
-  private stockSymbols: FinnhubCryptoSymbol[];
-  
   get name(): string {
     return "crypto"
   }
 
   constructor() {
     super();
-    this.client = FinnhubClient;
-    void this.updateSymbols();
-    setInterval(this.updateSymbols.bind(this), 24 * 60 * 60 * 1000);
-  }
-
-  async updateSymbols() {
-    this.stockSymbols = await this.client.crypto.symbols('binance');
   }
 
   guildCommands(): SlashCommandBuilder[] {
@@ -44,8 +37,8 @@ export class CryptoCommand extends AbstractCommand {
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
-    const symbolString = interaction.options.getString('symbol').trim().toUpperCase();
-    const symbol = this.stockSymbols.find(c => (c.displaySymbol == symbolString || `${symbolString}/USDT` == c.displaySymbol));
+    const symbolString = interaction.options.getString('symbol').trim().toLowerCase();
+    const symbol = cryptoManager.getSymbolFromString(symbolString);
     if (!symbol) {
       await interaction.reply({ephemeral: true, content: 'Invalid stock symbol.'});
       return;
@@ -53,24 +46,29 @@ export class CryptoCommand extends AbstractCommand {
 
     await interaction.deferReply();
 
-    const candles = await this.client.crypto.candles(symbol, get24HoursAgoTimestamp(), new Date().getTime(), 15);
+    const candles = await cryptoManager.getCandles(symbol);
+    const stats = await cryptoManager.getPrice(symbol);
     let dates = [];
     let data = [];
-    for (var i = 0; i < candles.t.length; i++) {
-      dates.push(formatAMPM(new Date(candles.t[i] * 1000)));
-      data.push([candles.o[i], candles.c[i], candles.l[i], candles.h[i]]);
+    for (var i = 0; i < candles.length; i++) {
+      dates.push(formatAMPM(new Date(candles[i].time)));
+      data.push([candles[i].open, candles[i].close, candles[i].low, candles[i].high]);
     }
-    const candleImageSVG = await echartService.renderCandlestickChart(symbol.description, dates, data);
+    const candleImageSVG = await echartService.renderCandlestickChart(symbol.symbol, dates, data);
     const candleImage = await sharp(Buffer.from(candleImageSVG)).jpeg().toBuffer();
     const embed = new MessageEmbed();
-    embed.setTitle(symbol.displaySymbol);
+    embed.setTitle(symbol.symbol);
 
-    const increase = candles.c[candles.c.length - 1] - candles.c[0];
-    const percentChange = (increase / candles.c[0] * 100).toFixed(2);
+    const increase = stats.last - stats.open;
+    const percentChange = (increase / stats.open * 100).toFixed(2);
 
     embed.addFields(
-      { name: 'Current Price', value: candles.c[candles.t.length - 1].toString() },
-      { name: 'Change 24h', value: `${percentChange}%`}
+      { name: 'Current', value: `$${stats.last.toString()}` },
+      { name: 'High', value: `$${stats.high.toString()}`, inline: true},
+      { name: 'Low', value: `$${stats.low.toString()}`, inline: true},
+      { name: 'Volume 24h', value: `$${stats.volume.toString()}`, inline: true},
+      { name: 'Change 24h', value: `${percentChange}%`, inline: true},
+      { name: 'CoinMarketCap', value: (await CoinMarketCap.symbolToURL(symbol))},
     );
 
     embed.setImage(`attachment://candle.jpg`);

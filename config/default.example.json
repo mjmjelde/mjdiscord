@@ -9,6 +9,9 @@
   "giphy": {
       "apikey": "CHANGE_ME"
   },
+  "coinmarketcap": {
+    "apikey": "CHANGE_ME"
+  },
   "json_command_file": "config/commands.json",
   "radarr": {
     "baseurl": "http://localhost:7878/api",

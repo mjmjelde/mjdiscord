@@ -29,11 +29,13 @@ export class BinanceExchange extends CryptoExchange {
     }});
   }
 
-  async getCandlesticks(symbol: ExchangeSymbol, interval: ExchangeInterval): Promise<ExchangeCandle[]> {
+  async getCandlesticks(symbol: ExchangeSymbol, interval: ExchangeInterval, start?: number, end?: number): Promise<ExchangeCandle[]> {
     const apiResp = await this.client.get('/klines', {
       params: {
         symbol: symbol.symbol,
-        interval: this.intervalToString(interval)
+        interval: this.intervalToString(interval),
+        startTime: start ? start : undefined,
+        endTime: end ? end : undefined
       }
     });
     return apiResp.data.map(candle => {

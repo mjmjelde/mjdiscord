@@ -26,16 +26,18 @@ export class CoinbaseExchange extends CryptoExchange {
     return resp;
   }
 
-  async getCandlesticks(symbol: ExchangeSymbol, interval: ExchangeInterval): Promise<ExchangeCandle[]> {
+  async getCandlesticks(symbol: ExchangeSymbol, interval: ExchangeInterval, start?: number, end?: number): Promise<ExchangeCandle[]> {
     const apiResp = await axios.get(`https://api.exchange.coinbase.com/products/${symbol.symbol}/candles`, {
       params: {
-        granularity: interval
+        granularity: interval,
+        start: start ? new Date(start) : undefined,
+        end: end ? new Date(end) : undefined
       }
     });
     const resp: ExchangeCandle[] = [];
-    apiResp.data.forEach(element => {
+    apiResp.data.reverse().forEach(element => {
       resp.push({
-        time: element[0],
+        time: element[0] * 1000,
         low: element[1],
         high: element[2],
         open: element[3],
