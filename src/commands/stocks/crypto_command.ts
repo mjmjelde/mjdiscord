@@ -46,33 +46,37 @@ export class CryptoCommand extends AbstractCommand {
 
     await interaction.deferReply();
 
-    const candles = await cryptoManager.getCandles(symbol);
-    const stats = await cryptoManager.getPrice(symbol);
-    let dates = [];
-    let data = [];
-    for (var i = 0; i < candles.length; i++) {
-      dates.push(formatAMPM(new Date(candles[i].time)));
-      data.push([candles[i].open, candles[i].close, candles[i].low, candles[i].high]);
+    try {
+      const candles = await cryptoManager.getCandles(symbol);
+      const stats = await cryptoManager.getPrice(symbol);
+      let dates = [];
+      let data = [];
+      for (var i = 0; i < candles.length; i++) {
+        dates.push(formatAMPM(new Date(candles[i].time)));
+        data.push([candles[i].open, candles[i].close, candles[i].low, candles[i].high]);
+      }
+      const candleImageSVG = await echartService.renderCandlestickChart(symbol.symbol, dates, data);
+      const candleImage = await sharp(Buffer.from(candleImageSVG)).jpeg().toBuffer();
+      const embed = new MessageEmbed();
+      embed.setTitle(symbol.symbol);
+
+      const increase = stats.last - stats.open;
+      const percentChange = (increase / stats.open * 100).toFixed(2);
+
+      embed.addFields(
+        { name: 'Current', value: `$${stats.last.toString()}` },
+        { name: 'High', value: `$${stats.high.toString()}`, inline: true},
+        { name: 'Low', value: `$${stats.low.toString()}`, inline: true},
+        { name: 'Volume 24h', value: `$${stats.volume.toString()}`, inline: true},
+        { name: 'Change 24h', value: `${percentChange}%`, inline: true},
+        { name: 'CoinMarketCap', value: (await CoinMarketCap.symbolToURL(symbol))},
+      );
+
+      embed.setImage(`attachment://candle.jpg`);
+      interaction.editReply({embeds: [embed], files: [{ attachment: candleImage, name: 'candle.jpg' }]});
+    } catch(e) {
+      interaction.editReply({content: 'There was an error grabbing the crypto data.  Please try again later...'});
     }
-    const candleImageSVG = await echartService.renderCandlestickChart(symbol.symbol, dates, data);
-    const candleImage = await sharp(Buffer.from(candleImageSVG)).jpeg().toBuffer();
-    const embed = new MessageEmbed();
-    embed.setTitle(symbol.symbol);
-
-    const increase = stats.last - stats.open;
-    const percentChange = (increase / stats.open * 100).toFixed(2);
-
-    embed.addFields(
-      { name: 'Current', value: `$${stats.last.toString()}` },
-      { name: 'High', value: `$${stats.high.toString()}`, inline: true},
-      { name: 'Low', value: `$${stats.low.toString()}`, inline: true},
-      { name: 'Volume 24h', value: `$${stats.volume.toString()}`, inline: true},
-      { name: 'Change 24h', value: `${percentChange}%`, inline: true},
-      { name: 'CoinMarketCap', value: (await CoinMarketCap.symbolToURL(symbol))},
-    );
-
-    embed.setImage(`attachment://candle.jpg`);
-    interaction.editReply({embeds: [embed], files: [{ attachment: candleImage, name: 'candle.jpg' }]});
   }
 
 }

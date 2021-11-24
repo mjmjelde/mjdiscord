@@ -1,4 +1,5 @@
 import { Guild } from "discord.js";
+import log from "../../util/logger";
 import { get24HoursAgoTimestamp } from "../../util/time";
 import { AbstractService } from "../abstract_service";
 import { CryptoExchange } from "./abstract_exchange";
@@ -13,18 +14,22 @@ export class CryptoManager {
     this.exchanges['coinbase'] = new CoinbaseExchange();
     this.exchanges['binance'] = new BinanceExchange();
     void this.updateSymbols();
-    setInterval(this.updateSymbols.bind(this), 60 * 60 * 1000);
+    setInterval(this.updateSymbols.bind(this), 30 * 60 * 1000);
   }
 
   private async updateSymbols() {
     let updatedSymbols: {[name: string]: ExchangeSymbol} = {};
     for (const exName in this.exchanges) {
-      const symbols = (await this.exchanges[exName].getSymbols()).filter(s => s.quoteAsset == "USD");
-      symbols.forEach(symbol => {
-        if(!updatedSymbols.hasOwnProperty(symbol.baseAsset.toLowerCase())) {
-          updatedSymbols[symbol.baseAsset.toLowerCase()] = symbol;
-        }
-      })
+      try {
+        const symbols = (await this.exchanges[exName].getSymbols()).filter(s => s.quoteAsset == "USD");
+        symbols.forEach(symbol => {
+          if(!updatedSymbols.hasOwnProperty(symbol.baseAsset.toLowerCase())) {
+            updatedSymbols[symbol.baseAsset.toLowerCase()] = symbol;
+          }
+        });
+      } catch(e) {
+        log.error(`Error grabbing from exchange: ${exName}`);
+      }
     }
     this.cryptoSymbols = updatedSymbols;
   }
