@@ -71,6 +71,7 @@ export class TeamCommand extends AbstractCommand {
       const collector = interaction.channel.createMessageComponentCollector({filter: buttonFilter, time: 5 * 60 * 1000, max: 1});
       collector.on('collect', async i => {
         let bi = i as ButtonInteraction;
+        console.log(`Button Clicked: ${bi.customId}`);
         if (bi.customId.startsWith("accept")) {
           for (let i = 0; i < teams.length; i++) {
             const chan = guildChannels[i];
