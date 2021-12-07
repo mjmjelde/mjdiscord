@@ -62,5 +62,9 @@
   {
     "name": "noway",
     "help": "noway : NO WAY!"
+  },
+  {
+    "name": "getgood",
+    "help": "getgood : Get Good!"
   }
 ]
