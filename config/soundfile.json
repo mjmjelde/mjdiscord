@@ -66,5 +66,9 @@
   {
     "name": "getgood",
     "help": "getgood : Get Good!"
+  },
+  {
+    "name": "shiton",
+    "help": "shiton : Get shit on!"
   }
 ]
