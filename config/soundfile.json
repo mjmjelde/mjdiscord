@@ -70,5 +70,9 @@
   {
     "name": "shiton",
     "help": "shiton : Get shit on!"
+  },
+  {
+    "name": "whackfuck",
+    "help": "whackfuck : WHACK FUCK!"
   }
 ]
