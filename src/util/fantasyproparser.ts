@@ -104,7 +104,7 @@ export namespace FantasyPros {
             type: newsTypeFromString(categoryLink[categoryLink.length - 1])
           })
         } catch(e) {
-          log.error(e);
+          log.info(e);
         }
       }
     }
