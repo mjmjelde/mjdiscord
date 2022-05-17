@@ -41,7 +41,7 @@ export class NFLNewsCommand extends AbstractCommand {
     command.addStringOption(option => {
       option.setName('newstype');
       option.setDescription('Type of new items to listen for');
-      option.addChoices(Object.keys(FantasyPros.NewsType).map(x => {return [camelCase(x), x]}));
+      option.addChoices(...Object.keys(FantasyPros.NewsType).map(x => { return {name: camelCase(x), value: x}}));
       return option;
     });
     command.addBooleanOption(option => {

@@ -1,8 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { APIMessage } from 'discord-api-types';
 import { CollectorFilter, CommandInteraction, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed, MessageReaction, Snowflake, User } from "discord.js";
 import log from "../util/logger";
-import { randomIntFromInterval } from "../util/numbers";
 import { stringToMilliseconds } from "../util/time";
 import { AbstractCommand } from "./abstract_command";
 

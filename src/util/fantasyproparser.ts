@@ -65,7 +65,9 @@ export namespace FantasyPros {
     constructor(sport: Sport) {
       super();
       this.sport = sport;
-      this.cache = new LRUCache();
+      this.cache = new LRUCache({
+        max: 150
+      });
       void this.parseNews().then(() => {
         this.loaded = true;
       });

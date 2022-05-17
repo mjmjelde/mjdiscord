@@ -84,7 +84,7 @@ export class TeamCommand extends AbstractCommand {
         reply['components'] = [];
         await interaction.editReply(reply);
       });
-      collector.on('end', async () => {
+      collector.on('end', async (collected) => {
         reply['components'] = [];
         await interaction.editReply(reply);
       });
