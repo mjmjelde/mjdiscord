@@ -45,7 +45,7 @@ export class MjBot {
   }
 
   private async ready() {
-    this.logger.info('Client connected!');
+    console.log('Client connected!');
 
     const globalCommands = [];
     this.commands.forEach(command => {
