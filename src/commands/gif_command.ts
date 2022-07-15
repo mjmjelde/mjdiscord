@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import Axios, { AxiosInstance } from "axios";
-import { get } from "config";
+import config from "config";
 import { CommandInteraction } from "discord.js";
 import log from "../util/logger";
 import { randomIntFromInterval } from "../util/numbers";
@@ -51,7 +51,7 @@ export class GifCommand extends AbstractCommand {
     super();
     this.axios = Axios.create({
       params: {
-        key: get('tenor.apikey')
+        key: config.get('tenor.apikey')
       },
       baseURL: "https://g.tenor.com/v1"
     });

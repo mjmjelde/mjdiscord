@@ -1,5 +1,5 @@
 import Axios, { AxiosInstance } from "axios";
-import config = require("config");
+import config from "config";
 import { EventEmitter } from "events";
 import WebSocket = require("ws");
 import log from "../../util/logger";

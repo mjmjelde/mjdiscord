@@ -1,4 +1,4 @@
-import { get } from "config";
+import config from "config";
 import { Client, Guild, Intents, Interaction } from "discord.js";
 import { REST } from '@discordjs/rest';
 import { Logger } from "tslog";
@@ -26,12 +26,12 @@ export class MjBot {
     ]});
     this.logger = log;
     this.commands = getCommands(this);
-    this.rest = new REST({ version: '9' }).setToken(get("client_key"));
+    this.rest = new REST({ version: '9' }).setToken(config.get("client_key"));
 
     this.client.once('ready', this.ready.bind(this));
     this.client.on('guildCreate', this.guildJoin.bind(this));
     this.client.on('interactionCreate', this.interactionCreate.bind(this));
-    this.client.login(get("client_key"));
+    this.client.login(config.get("client_key"));
 
     process.stdin.resume();
     process.stdin.setEncoding('utf-8');
@@ -53,7 +53,7 @@ export class MjBot {
     });
     this.logger.info(`Registering ${globalCommands.length} global commands!`);
     await this.rest.put(
-      Routes.applicationCommands(get("client_id")),
+      Routes.applicationCommands(config.get("client_id")),
       { body: globalCommands }
     );
 
@@ -70,7 +70,7 @@ export class MjBot {
     
     this.logger.info(`Registering ${guildCommands.length} commands in ${guild.name}`);
     await this.rest.put(
-      Routes.applicationGuildCommands(get("client_id"), guild.id),
+      Routes.applicationGuildCommands(config.get("client_id"), guild.id),
       { body: guildCommands }
     );
   }

@@ -1,4 +1,4 @@
-import { get } from "config";
+import config from "config";
 
 export function getCommand(command: string) {
   if (!command.startsWith(commandCharacter())) {
@@ -8,5 +8,5 @@ export function getCommand(command: string) {
 }
 
 export function commandCharacter(): string {
-  return get('command_character');
+  return config.get('command_character');
 }

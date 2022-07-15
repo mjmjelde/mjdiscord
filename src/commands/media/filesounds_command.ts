@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { get } from "config";
+import config from "config";
 import { CommandInteraction, GuildMember } from "discord.js";
 import { readFileSync } from "fs";
 import musicService from "../../services/music";
@@ -21,7 +21,7 @@ export class FileSoundsCommand extends AbstractCommand {
   }
 
   guildCommands(): SlashCommandBuilder[] {
-    this.commands = JSON.parse(readFileSync(get('sound_clip_file'), 'utf-8')) as SoundFile[];
+    this.commands = JSON.parse(readFileSync(config.get('sound_clip_file'), 'utf-8')) as SoundFile[];
     const commandBuilders: SlashCommandBuilder[] = [];
     for (const commandJson of this.commands) {
       commandBuilders.push(
