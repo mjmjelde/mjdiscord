@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CollectorFilter, CommandInteraction, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed, MessageReaction, Snowflake, User } from "discord.js";
+import { CollectorFilter, CommandInteraction, EmbedBuilder, Message, MessageReaction, User } from "discord.js";
 import log from "../util/logger";
 import { stringToMilliseconds } from "../util/time";
 import { AbstractCommand } from "./abstract_command";
@@ -29,15 +29,18 @@ export class VoteCommand extends AbstractCommand {
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
+    if (!interaction.isChatInputCommand()) return;
     const msg = interaction.options.getString('msg');
     const time = stringToMilliseconds(interaction.options.getString('time'));
 
-    const embed = new MessageEmbed();
+    const embed = new EmbedBuilder();
     embed.setTitle('Vote System');
-    embed.addField('Question', msg);
+    embed.addFields([
+      { name: 'Question', value: msg }
+    ]);
 
     const reactionFilter: CollectorFilter<[MessageReaction, User]> = (reaction, user) => {
-      return ['👍', '👎'].includes(reaction.emoji.name) && interaction.guild.me.id != user.id;
+      return ['👍', '👎'].includes(reaction.emoji.name) && interaction.guild.members.me.id != user.id;
       // return true;
     }
 

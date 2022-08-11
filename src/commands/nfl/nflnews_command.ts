@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { Channel, Client, CommandInteraction, DMChannel, GuildMember, MessageEmbed, Snowflake, TextChannel } from "discord.js";
+import { Client, CommandInteraction, DMChannel, EmbedBuilder, GuildMember, Snowflake, TextChannel } from "discord.js";
 import { readFileSync, writeFileSync } from "fs";
 import { camelCase } from "lodash";
 import { join } from "path";
@@ -63,6 +63,7 @@ export class NFLNewsCommand extends AbstractCommand {
   }
   
   async execute(interaction: CommandInteraction): Promise<void> {
+    if (!interaction.isChatInputCommand()) return;
     const typeString = interaction.options.getString('newstype');
     log.debug(typeString);
     const type: FantasyPros.NewsType = interaction.options.getString('newstype') == undefined ? FantasyPros.NewsType.ALL : FantasyPros.NewsType[interaction.options.getString('newstype')];
@@ -114,7 +115,7 @@ export class NFLNewsCommand extends AbstractCommand {
 
   private async newsItem(item: FantasyPros.NewsItem) {
     log.debug(item);
-    const msg = new MessageEmbed();
+    const msg = new EmbedBuilder();
     msg.setTitle(item.title);
     if (item.picture) {
       msg.setImage(item.picture);
@@ -123,7 +124,9 @@ export class NFLNewsCommand extends AbstractCommand {
     msg.setURL(item.url);
     // msg.setFooter(item.fantasyImpact);
     if (item.fantasyImpact) {
-      msg.addField('Fantasy Impact', item.fantasyImpact);
+      msg.addFields([
+        {name: 'Fantasy Impact', value: item.fantasyImpact}
+      ]);
     }
 
     for (const channel of this.channels.values()) {

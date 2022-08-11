@@ -1,5 +1,5 @@
 import config from "config";
-import { Client, Guild, Intents, Interaction } from "discord.js";
+import { Client, GatewayIntentBits, Guild, Interaction, Partials } from "discord.js";
 import { REST } from '@discordjs/rest';
 import { Logger } from "tslog";
 import { AbstractCommand } from "./commands/abstract_command";
@@ -15,15 +15,22 @@ export class MjBot {
 
   constructor() {
     this.client = new Client({ intents: [
-      Intents.FLAGS.GUILDS, 
-      Intents.FLAGS.GUILD_MESSAGES,
-      Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-      Intents.FLAGS.GUILD_BANS,
-      Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
-      Intents.FLAGS.GUILD_VOICE_STATES,
-      Intents.FLAGS.GUILD_INTEGRATIONS,
-      Intents.FLAGS.DIRECT_MESSAGES, 
-    ]});
+      GatewayIntentBits.Guilds, 
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.GuildMessageReactions,
+      GatewayIntentBits.GuildBans,
+      GatewayIntentBits.GuildEmojisAndStickers,
+      GatewayIntentBits.GuildVoiceStates,
+      GatewayIntentBits.GuildIntegrations,
+      GatewayIntentBits.DirectMessages, 
+      GatewayIntentBits.DirectMessageReactions
+    ],
+    partials: [
+      Partials.Message,
+      Partials.Channel,
+      Partials.Reaction,
+    ]
+  });
     this.logger = log;
     this.commands = getCommands(this);
     this.rest = new REST({ version: '9' }).setToken(config.get("client_key"));

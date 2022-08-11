@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import axios from "axios";
-import { CommandInteraction, MessageAttachment } from "discord.js";
+import { AttachmentBuilder, CommandInteraction } from "discord.js";
 import parse from "node-html-parser";
 import sharp from "sharp";
 import log from "../util/logger";
@@ -42,7 +42,7 @@ export class RandomComicCommand extends AbstractCommand {
             { input: await img3.toBuffer(), left: img1Meta.width * 2, top: 0 }
           ]).withMetadata().webp( { quality: 90 });
 
-          const attachment = new MessageAttachment(await newImg.toBuffer());
+          const attachment = new AttachmentBuilder(await newImg.toBuffer());
           await interaction.editReply({files: [attachment]});
           newImg.destroy();
           img1.destroy();

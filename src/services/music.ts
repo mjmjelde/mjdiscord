@@ -87,7 +87,7 @@ export class MusicGuild {
   }
 
   private getOrCreateVoiceConnection(channelId: string): VoiceConnection {
-    if (!this.guild.me.voice.channelId) {
+    if (!this.guild.members.me.voice.channelId) {
       const vc = joinVoiceChannel({
         guildId: this.guild.id,
         channelId: channelId,
@@ -96,7 +96,7 @@ export class MusicGuild {
       });
       this.setVoiceConnectionListeners(vc);
       return vc;
-    } else if (this.guild.me.voice.channelId != channelId) {
+    } else if (this.guild.members.me.voice.channelId != channelId) {
       getVoiceConnection(this.guild.id).destroy();
       const vc = joinVoiceChannel({
         guildId: this.guild.id,

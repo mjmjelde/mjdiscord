@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { ButtonInteraction, Collection, CollectorFilter, CollectorOptions, CommandInteraction, Guild, GuildChannel, GuildMember, InteractionReplyOptions, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed, Snowflake, ThreadChannel } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ChannelType, Collection, CollectorFilter, CollectorOptions, CommandInteraction, EmbedBuilder, Guild, GuildChannel, GuildMember, InteractionReplyOptions, MessageComponentInteraction, PermissionFlagsBits, Snowflake, ThreadChannel } from "discord.js";
 import log from "../util/logger";
 import { randomIntFromInterval } from "../util/numbers";
 import { delay } from "../util/time";
@@ -28,6 +28,7 @@ export class TeamCommand extends AbstractCommand {
   }
   
   async execute(interaction: CommandInteraction): Promise<void> {
+    if (!interaction.isChatInputCommand()) return;
     if (!interaction.member) {
       await interaction.reply('Please use this command in a guild channel');
       return;
@@ -51,19 +52,23 @@ export class TeamCommand extends AbstractCommand {
     const guildChannels = this.channels(interaction.guild);
 
     const reply: InteractionReplyOptions = {}
-    const replyEmbed = new MessageEmbed().setTitle("Teams");
+    const replyEmbed = new EmbedBuilder().setTitle("Teams");
     reply['embeds'] = [replyEmbed];
     for (let i = 0; i < teams.length; i++) {
-      replyEmbed.addField(`Team ${i + 1}`, teams[i].length > 0 ? teams[i].map(gm => gm.displayName).join('\n') : "None", true);
+      replyEmbed.addFields([
+        { name: `Team ${i + 1}`, value: teams[i].length > 0 ? teams[i].map(gm => gm.displayName).join('\n') : "None"},
+      ]);
     }
-    if (teams.length <= guildChannels.size && interaction.guild.me.permissions.has("MOVE_MEMBERS")) {
-      replyEmbed.setFooter(`Move the teams to different channels? (Click reaction)`);
+    if (teams.length <= guildChannels.size && interaction.guild.members.me.permissions.has(PermissionFlagsBits.MoveMembers)) {
+      replyEmbed.setFooter({
+        text: `Move the teams to different channels? (Click reaction)`,
+      });
       const randomInt = randomIntFromInterval(0, 10000);
-      const buttons = new MessageActionRow().addComponents(
-        new MessageButton().setCustomId(`accept${randomInt}`).setStyle("PRIMARY").setEmoji('👍'),
-        new MessageButton().setCustomId(`deny${randomInt}`).setStyle("DANGER").setEmoji('👎'),
+      const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder().setCustomId(`accept${randomInt}`).setStyle(ButtonStyle.Primary).setEmoji('👍'),
+        new ButtonBuilder().setCustomId(`deny${randomInt}`).setStyle(ButtonStyle.Danger).setEmoji('👎'),
       );
-      reply['components'] = [buttons];
+      reply.components = [buttons];
       const buttonFilter: CollectorFilter<[MessageComponentInteraction]> = (inter) => {
         return (inter.customId == `accept${randomInt}` || inter.customId == `deny${randomInt}`) && inter.user.id == interaction.user.id
            
@@ -126,7 +131,7 @@ export class TeamCommand extends AbstractCommand {
   }
 
   private channels(guild: Guild): Collection<string, GuildChannel | ThreadChannel> {
-    return guild.channels.cache.filter(channel => channel instanceof GuildChannel && channel.isVoice() && channel.name.toLocaleLowerCase().startsWith("mw"));
+    return guild.channels.cache.filter(channel => channel instanceof GuildChannel && channel.type == ChannelType.GuildVoice && channel.name.toLocaleLowerCase().startsWith("mw"));
   }
 
 }

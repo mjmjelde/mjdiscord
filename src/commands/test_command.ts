@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { BaseCommandInteraction, CommandInteraction, Interaction } from "discord.js";
+import { CommandInteraction, Interaction } from "discord.js";
 import { AbstractCommand } from "./abstract_command";
 
 export class TestCommand extends AbstractCommand {

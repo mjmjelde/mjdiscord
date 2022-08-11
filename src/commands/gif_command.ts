@@ -75,8 +75,10 @@ export class GifCommand extends AbstractCommand {
     return interaction.commandName == "gif";
   }
   async execute(interaction: CommandInteraction): Promise<void> {
+    if (!interaction.isChatInputCommand())
+      return;
     await interaction.deferReply();
-    const searchString = interaction.options.getString("search");
+    const searchString = (interaction.options).getString("search");
     log.debug(`Gif search term: ${searchString}`);
     this.axios.get('/search', {
       params: {

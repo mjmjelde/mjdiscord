@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CommandInteraction, MessageEmbed } from "discord.js";
+import { CommandInteraction, EmbedBuilder } from "discord.js";
 import FinnhubClient, { Finnhub } from "../../lib/stocks/finnhub";
 import { FinnhubSymbol } from "../../lib/stocks/types/finnhub_symbol";
 import log from "../../util/logger";
@@ -41,6 +41,7 @@ export class StockCommand extends AbstractCommand {
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
+    if (!interaction.isChatInputCommand()) return;
     const symbolString = interaction.options.getString('symbol').trim().toUpperCase();
     const symbol = this.stock_symbols.find(c => c.symbol == symbolString);
 
@@ -51,7 +52,7 @@ export class StockCommand extends AbstractCommand {
     await interaction.deferReply();
     const profile = await this.client.profile2(symbol);
     this.client.quote(symbol).then(async (quote) => {
-      const embed = new MessageEmbed();
+      const embed = new EmbedBuilder();
       embed.setTitle(profile.name);
       embed.setThumbnail(profile.logo);
       embed.addFields(

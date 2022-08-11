@@ -1,6 +1,6 @@
 import FinnhubClient, { Finnhub } from "../../lib/stocks/finnhub";
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CommandInteraction, MessageEmbed } from "discord.js";
+import { CommandInteraction, EmbedBuilder } from "discord.js";
 import { AbstractCommand } from "../abstract_command";
 import { FinnhubCryptoSymbol } from "../../lib/stocks/types/finnhub_symbol";
 import { formatAMPM, get24HoursAgoTimestamp } from "../../util/time";
@@ -37,6 +37,7 @@ export class CryptoCommand extends AbstractCommand {
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
+    if (!interaction.isChatInputCommand()) return;
     const symbolString = interaction.options.getString('symbol').trim().toLowerCase();
     const symbol = cryptoManager.getSymbolFromString(symbolString);
     if (!symbol) {
@@ -57,7 +58,7 @@ export class CryptoCommand extends AbstractCommand {
       }
       const candleImageSVG = await echartService.renderCandlestickChart(symbol.symbol, dates, data);
       const candleImage = await sharp(Buffer.from(candleImageSVG)).jpeg().toBuffer();
-      const embed = new MessageEmbed();
+      const embed = new EmbedBuilder();
       embed.setTitle(symbol.symbol);
 
       const increase = stats.last - stats.open;

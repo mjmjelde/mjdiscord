@@ -1,6 +1,7 @@
 import { MjBot } from "../mjbot";
 import { AbstractCommand } from "./abstract_command";
 import { DadCommand } from "./dad_command";
+import { Eggplant } from "./eggplant.js";
 import { GifCommand } from "./gif_command";
 import { FileSoundsCommand } from "./media/filesounds_command";
 import { PlayCommand } from "./media/play_command";
@@ -18,6 +19,8 @@ import { VoteCommand } from "./vote_command";
 import { WelcomeCommand } from "./welcome_command";
 
 export function getCommands(bot: MjBot): AbstractCommand[] {
+  // Not a command, but we still want to use it
+  new Eggplant(bot.client);
   return [
     new WelcomeCommand(),
 

@@ -29,6 +29,9 @@ export class PlayCommand extends AbstractCommand {
   }
 
   async execute(interaction: CommandInteraction): Promise<void> {
+    if (!interaction.isChatInputCommand()) 
+      return;
+
     if (!(interaction.member instanceof GuildMember)) {
       log.debug("Not a GuildMember when receiving an interaction");
       await interaction.reply({ephemeral: true, content: 'Error processing your command'});
