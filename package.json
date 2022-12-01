@@ -41,6 +41,6 @@
     "tslog": "^3.3.3",
     "typescript": "^4.6.4",
     "underscore": "^1.13.3",
-    "ytdl-core": "^4.11.1"
+    "ytdl-core": "https://github.com/matteopolak/node-ytdl-core.git#d6b56cd67aaa38c22966b98f7b36ad3db4c90192"
   }
 }
