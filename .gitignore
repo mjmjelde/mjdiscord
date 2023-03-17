@@ -5,3 +5,12 @@ data/
 node_modules
 dist
 old
+
+target/
+debug/
+
+Cargo.lock
+
+**/*.rs.bk
+
+*.pdb

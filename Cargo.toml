@@ -1,0 +1,17 @@
+[package]
+name = "mjdiscord-rust"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+config = { version = "0.13.1", features = ["yaml"] }
+tokio = { version = "1.26.0", features = ["macros", "rt-multi-thread"] }
+tracing = "0.1.37"
+twilight = "0.15.0"
+twilight-cache-inmemory = "0.15.1"
+twilight-gateway = "0.15.1"
+twilight-http = "0.15.1"
+twilight-interactions = "0.15.0"
+twilight-model = "0.15.1"
