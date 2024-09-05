@@ -1,7 +1,7 @@
 import config from "config";
 import { Client, GatewayIntentBits, Guild, Interaction, Partials } from "discord.js";
 import { REST } from '@discordjs/rest';
-import { Logger } from "tslog";
+import { ILogObj, Logger } from "tslog";
 import { AbstractCommand } from "./commands/abstract_command";
 import { getCommands } from "./commands/commands";
 import { Routes } from "discord-api-types/v9";
@@ -9,7 +9,7 @@ import log from "./util/logger";
 
 export class MjBot {
   public client: Client;
-  private logger: Logger;
+  private logger: Logger<ILogObj>;
   private commands: AbstractCommand[];
   private rest: REST;
 

@@ -69,22 +69,22 @@ async function test() {
   exit(0)
 
 
-  const symbols = await cb.getSymbols();
-  const filtered = symbols.filter(s => s.quoteAsset == "USD");
-  let sa: {[name: string]: StockAverage} = {};
-  filtered.forEach(s => {
-    sa[s.symbol] = new StockAverage(s)
-  });
-  cb.subscribeToTrades(filtered);
-  cb.on('trade', trade => {
-    sa[trade.symbol].addTrade(trade);
-  });
+  // const symbols = await cb.getSymbols();
+  // const filtered = symbols.filter(s => s.quoteAsset == "USD");
+  // let sa: {[name: string]: StockAverage} = {};
+  // filtered.forEach(s => {
+  //   sa[s.symbol] = new StockAverage(s)
+  // });
+  // cb.subscribeToTrades(filtered);
+  // cb.on('trade', trade => {
+  //   sa[trade.symbol].addTrade(trade);
+  // });
 
-  setInterval(() => {
-    for (const s in sa) {
-      sa[s].printAverage();
-    }
-  }, 5 * 60 * 1000);
+  // setInterval(() => {
+  //   for (const s in sa) {
+  //     sa[s].printAverage();
+  //   }
+  // }, 5 * 60 * 1000);
 }
 
 test();

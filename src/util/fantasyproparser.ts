@@ -1,7 +1,7 @@
 import axios from "axios";
 import { load } from "cheerio";
 import EventEmitter from "events";
-import LRUCache from "lru-cache";
+import { LRUCache } from "lru-cache";
 import { resolve } from "url";
 import log from "./logger";
 

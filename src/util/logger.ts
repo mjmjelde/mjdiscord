@@ -1,4 +1,4 @@
 import config from 'config';
-import { Logger } from 'tslog';
-const log: Logger = new Logger({name: 'MjBot', minLevel: config.get("loglevel")});
+import { ILogObj, Logger } from 'tslog';
+const log: Logger<ILogObj> = new Logger({name: 'MjBot', minLevel: config.get("loglevel")});
 export default log;

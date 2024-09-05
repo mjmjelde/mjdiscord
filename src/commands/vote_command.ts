@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CollectorFilter, CommandInteraction, EmbedBuilder, Message, MessageReaction, User } from "discord.js";
+import { CollectorFilter, CommandInteraction, EmbedBuilder, Message, MessageReaction, TextChannel, User } from "discord.js";
 import log from "../util/logger";
 import { stringToMilliseconds } from "../util/time";
 import { AbstractCommand } from "./abstract_command";
@@ -69,9 +69,14 @@ export class VoteCommand extends AbstractCommand {
       const no = collected.get('👎').count - 1;
       await message.reactions.removeAll();
       if (yes > no) {
-        await message.channel.send(`The vote passes! With ${yes} for and ${no} against!`)
+        if (message.channel.isTextBased()) {
+          await (message.channel as TextChannel).send(`The vote passes! With ${yes} for and ${no} against!`);
+        }
+        // await message.channel.send(`The vote passes! With ${yes} for and ${no} against!`)
       } else {
-        await message.channel.send(`The vote fails! With ${yes} for and ${no} against!`);
+        if (message.channel.isTextBased()) {
+          await (message.channel as TextChannel).send(`The vote fails! With ${yes} for and ${no} against!`);
+        }
       }
     })
     
