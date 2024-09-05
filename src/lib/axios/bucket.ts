@@ -64,7 +64,7 @@ export default class Bucket {
 
       // make request
       try {
-        var res = await (axios.defaults.adapter as AxiosAdapter)(entry.config);
+        var res = await axios.request(entry.config);
       } catch (e) {
         entry.reject(e);
         continue;
