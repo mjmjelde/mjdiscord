@@ -1,7 +1,7 @@
 import { AudioResource, createAudioResource, demuxProbe, StreamType } from "@discordjs/voice";
 import { Snowflake } from "discord.js";
 import { createReadStream } from "fs";
-import ytdl from "ytdl-core";
+import ytdl from "@distube/ytdl-core";
 import log from "../../util/logger";
 import { download } from "./youtube";
 

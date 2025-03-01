@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, GuildMember } from "discord.js";
-import { getInfo, getVideoID } from "ytdl-core";
+import { getInfo, getVideoID } from "@distube/ytdl-core";
 import musicService from "../../services/music";
 import { Track } from "../../services/music/music_types";
 import log from "../../util/logger";

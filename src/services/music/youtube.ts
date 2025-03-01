@@ -1,4 +1,5 @@
-const ytdl = require('ytdl-core');
+// const ytdl = require('ytdl-core');
+import ytdl from "@distube/ytdl-core";
 const prism = require('prism-media');
 const { pipeline } = require('stream');
 
@@ -29,9 +30,9 @@ export async function download(url, options = {}) {
 	const info = await ytdl.getInfo(url);
 	// Prefer opus
 	const format = info.formats.find(filter);
-	const canDemux = format && info.videoDetails.lengthSeconds != 0;
+	const canDemux = format && info.videoDetails.lengthSeconds != "0";
 	if (canDemux) options = { ...options, filter };
-	else if (info.videoDetails.lengthSeconds != 0) options = { ...options, filter: 'audioonly' };
+	else if (info.videoDetails.lengthSeconds != "0") options = { ...options, filter: 'audioonly' };
 	if (canDemux) {
 		const demuxer = new prism.opus.WebmDemuxer();
 		return pipeline([
