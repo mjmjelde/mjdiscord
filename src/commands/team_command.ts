@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ChannelType, Collection, CollectorFilter, CollectorOptions, CommandInteraction, EmbedBuilder, Guild, GuildChannel, GuildMember, InteractionReplyOptions, MessageComponentInteraction, PermissionFlagsBits, Snowflake, ThreadChannel } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ChannelType, Collection, CollectorFilter, CollectorOptions, CommandInteraction, EmbedBuilder, Guild, GuildChannel, GuildMember, InteractionEditReplyOptions, InteractionReplyOptions, MessageComponentInteraction, PermissionFlagsBits, Snowflake, ThreadChannel } from "discord.js";
 import log from "../util/logger";
 import { randomIntFromInterval } from "../util/numbers";
 import { delay } from "../util/time";
@@ -52,8 +52,10 @@ export class TeamCommand extends AbstractCommand {
     const guildChannels = this.channels(interaction.guild);
 
     const reply: InteractionReplyOptions = {}
+    const replyEdit: InteractionEditReplyOptions = {};
     const replyEmbed = new EmbedBuilder().setTitle("Teams");
     reply['embeds'] = [replyEmbed];
+    replyEdit['embeds'] = [replyEmbed];
     for (let i = 0; i < teams.length; i++) {
       replyEmbed.addFields([
         { name: `Team ${i + 1}`, value: teams[i].length > 0 ? teams[i].map(gm => gm.displayName).join('\n') : "None"},
@@ -75,6 +77,7 @@ export class TeamCommand extends AbstractCommand {
       }
       const collector = interaction.channel.createMessageComponentCollector({filter: buttonFilter, time: 5 * 60 * 1000, max: 1});
       collector.on('collect', async i => {
+        
         let bi = i as ButtonInteraction;
         console.log(`Button Clicked: ${bi.customId}`);
         if (bi.customId.startsWith("accept")) {
@@ -87,11 +90,11 @@ export class TeamCommand extends AbstractCommand {
           }
         }
         reply['components'] = [];
-        await interaction.editReply(reply);
+        // await interaction.editReply(reply);
       });
       collector.on('end', async (collected) => {
         reply['components'] = [];
-        await interaction.editReply(reply);
+        // await interaction.editReply(reply);
       });
     }
     

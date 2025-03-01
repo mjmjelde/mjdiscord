@@ -34,7 +34,7 @@ export function getCommands(bot: MjBot): AbstractCommand[] {
     new NFLNewsCommand(bot.client),
 
     new GifCommand(),
-    new TeamCommand(),
+    // new TeamCommand(),
     new TableFlipCommand(),
     new RandomComicCommand(),
     new MiddleFingerCommand(),

@@ -19,9 +19,9 @@
     "@types/underscore": "^1.11.15"
   },
   "dependencies": {
-    "@discordjs/opus": "^0.9.0",
+    "@discordjs/opus": "^0.10.0",
     "@discordjs/rest": "^2.4.0",
-    "@discordjs/voice": "^0.17.0",
+    "@discordjs/voice": "^0.18.0",
     "axios": "^1.7.7",
     "cheerio": "^1.0.0",
     "config": "^3.3.12",
@@ -30,17 +30,17 @@
     "discord.js": "^14.16.1",
     "echarts": "^5.5.1",
     "ffmpeg-static": "^5.2.0",
-    "jsdom": "^25.0.0",
+    "jsdom": "^26.0.0",
     "libsodium-wrappers": "^0.7.15",
     "lodash": "^4.17.21",
     "lru-cache": "^11.0.0",
     "luxon": "^3.5.0",
-    "node-html-parser": "^6.1.13",
+    "node-html-parser": "^7.0.1",
     "rss-parser": "^3.13.0",
     "sharp": "^0.33.5",
     "tslog": "^4.9.3",
     "typescript": "^5.5.4",
     "underscore": "^1.13.7",
-    "ytdl-core": "https://github.com/matteopolak/node-ytdl-core.git#d6b56cd67aaa38c22966b98f7b36ad3db4c90192"
+    "ytdl-core": "^4.11.5"
   }
 }
